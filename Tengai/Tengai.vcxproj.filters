@@ -9,49 +9,57 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Manager">
       <UniqueIdentifier>{4a653b15-e17f-499b-9666-a8eb9561df78}</UniqueIdentifier>
     </Filter>
     <Filter Include="DataStructure">
       <UniqueIdentifier>{b350fded-6513-4600-8c0e-086395dda60b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99.Default">
+      <UniqueIdentifier>{16e02a15-08e6-47b9-b514-cfe71a6e773b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainGame">
+      <UniqueIdentifier>{86ae0971-2b43-45ef-9307-0e1e5a6ebe67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject">
+      <UniqueIdentifier>{1108a2bb-0aca-416c-954c-8d37fe853672}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\1_Character">
+      <UniqueIdentifier>{4f69954c-b13a-437e-9442-1ebb1509ecd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\2_UI">
+      <UniqueIdentifier>{4623c41f-b173-4ae3-a43f-bf4d859f1b48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\1_Character\Bullet">
+      <UniqueIdentifier>{4eb96d15-e9a2-4ef6-8831-8878db876b61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\1_Character\Item">
+      <UniqueIdentifier>{43fd03f4-de0e-4a0f-8ca3-d2bcee124ec9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\1_Character\Monster">
+      <UniqueIdentifier>{d59a6f88-057c-4f54-b5d3-ca74a6af5f77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\1_Character\Player">
+      <UniqueIdentifier>{6c8c25ad-4968-4475-b514-7acf031be0e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\2_UI\BackGround">
+      <UniqueIdentifier>{5303a2f2-5b35-496e-8f13-3ca83763b7fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\2_UI\GameOverBox">
+      <UniqueIdentifier>{b773da3f-7369-44ad-84ee-11bdac6cd984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\2_UI\GameWinBox">
+      <UniqueIdentifier>{967c660a-a3b1-473d-b433-6ddd24dac3d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\2_UI\PauseBox">
+      <UniqueIdentifier>{e9f0876d-f0de-473b-b30e-4398618f9b00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\2_UI\Title">
+      <UniqueIdentifier>{fdf2c7c0-196c-4cbe-bf60-2ae4f1208b9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Tengai.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MainGame.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TimeManager.h">
@@ -68,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Define.h">
       <Filter>헤더 파일</Filter>
@@ -96,54 +101,63 @@
     <ClInclude Include="TestPlayScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="BackGround.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PauseBox.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="item.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOverBox.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Tengai.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGame.h">
+      <Filter>00.MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>01.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>01.GameObject\1_Character</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>01.GameObject\2_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>01.GameObject\1_Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>01.GameObject\1_Character\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>01.GameObject\1_Character\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>01.GameObject\1_Character\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>01.GameObject\2_UI\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverBox.h">
+      <Filter>01.GameObject\2_UI\GameOverBox</Filter>
+    </ClInclude>
     <ClInclude Include="GameWinBox.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>01.GameObject\2_UI\GameWinBox</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseBox.h">
+      <Filter>01.GameObject\2_UI\PauseBox</Filter>
     </ClInclude>
     <ClInclude Include="TitleUI.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>01.GameObject\2_UI\Title</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Tengai.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MainGame.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TimeManager.cpp">
@@ -161,9 +175,6 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="EventManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -176,39 +187,66 @@
     <ClCompile Include="TestPlayScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="BackGround.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="PauseBox.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="item.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOverBox.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Tengai.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGame.cpp">
+      <Filter>00.MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>01.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>01.GameObject\1_Character</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>01.GameObject\2_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>01.GameObject\1_Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>01.GameObject\1_Character\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>01.GameObject\1_Character\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>01.GameObject\1_Character\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>01.GameObject\2_UI\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverBox.cpp">
+      <Filter>01.GameObject\2_UI\GameOverBox</Filter>
+    </ClCompile>
     <ClCompile Include="GameWinBox.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>01.GameObject\2_UI\GameWinBox</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseBox.cpp">
+      <Filter>01.GameObject\2_UI\PauseBox</Filter>
     </ClCompile>
     <ClCompile Include="TitleUI.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>01.GameObject\2_UI\Title</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Tengai.ico">
+      <Filter>99.Default</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>99.Default</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tengai.rc">
-      <Filter>리소스 파일</Filter>
+      <Filter>99.Default</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="Tengai.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
   </ItemGroup>
 </Project>

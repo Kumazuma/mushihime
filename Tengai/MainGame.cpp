@@ -54,7 +54,6 @@ void MainGame::Release()
 
 void MainGame::Run()
 {
-
 	InputManager::Update();
 	if (pMainGame->isPause == false)
 	{

@@ -8,7 +8,6 @@ private:
 	~MainGame();
 
 public:
-
 	static MainGame* GetInstance();
 	static void Initialize();
 	static void Release();
