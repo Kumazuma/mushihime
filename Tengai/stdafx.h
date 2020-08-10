@@ -1,0 +1,34 @@
+#pragma once
+
+#include "targetver.h"
+#define WIN32_LEAN_AND_MEAN             // 거의 사용되지 않는 내용을 Windows 헤더에서 제외합니다.
+// Windows 헤더 파일
+#include <windows.h>
+// C 런타임 헤더 파일입니다.
+#include <stdlib.h>
+#include <malloc.h>
+#include <memory.h>
+#include <tchar.h>
+#include <iostream>
+#include <set>
+#include <map>
+#include <vector>
+#include <list>
+
+using namespace std;
+
+// 사용자 추가
+
+#include "MemoryPool.h"
+#include "Define.h"
+#include "MainGame.h"
+#include "TimeManager.h"
+#include "InputManager.h"
+#include "ObjectManager.h"
+#include "RenderManager.h"
+#include "SceneManager.h"
+#include "EventManager.h"
+
+
+extern HWND g_hwnd;
+
