@@ -57,6 +57,15 @@
     <Filter Include="01.GameObject\2_UI\Title">
       <UniqueIdentifier>{fdf2c7c0-196c-4cbe-bf60-2ae4f1208b9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{90d823ca-6e9c-4102-8a4d-eea637e3d627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Title">
+      <UniqueIdentifier>{6c6c5ab5-0da4-4799-a57e-18edeb33be67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Play">
+      <UniqueIdentifier>{a500da3f-e1ee-4cd3-a184-1fc7cb4c2d5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -80,9 +89,6 @@
     <ClInclude Include="Define.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterState.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="event.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -94,12 +100,6 @@
     </ClInclude>
     <ClInclude Include="D2DRenderManager.h">
       <Filter>Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="TestPlayScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleScene.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>99.Default</Filter>
@@ -155,11 +155,17 @@
     <ClInclude Include="Transform.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="TestPlayScene.h">
+      <Filter>Scene\Play</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterState.h">
+      <Filter>01.GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Scene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TimeManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -178,17 +184,8 @@
     <ClCompile Include="EventManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="CharacterState.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="D2DRenderManager.cpp">
       <Filter>Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="TestPlayScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>99.Default</Filter>
@@ -237,6 +234,18 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPlayScene.cpp">
+      <Filter>Scene\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterState.cpp">
+      <Filter>01.GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
