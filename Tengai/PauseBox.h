@@ -44,8 +44,10 @@ public:
 	virtual void Update() override
 	{
 		if (pParent == nullptr) return;
-
-		this->position = pParent->position + offset;
+		DirectX::FXMVECTOR parentPosition{ DirectX::XMLoadFloat2(&pParent->position) };
+		DirectX::FXMMATRIX translateMatrix{ DirectX::XMMatrixTranslation(offset.x, offset.y, 0.f)};
+		DirectX::FXMVECTOR myPosition{DirectX::XMVector4Transform(parentPosition, translateMatrix) };
+		DirectX::XMStoreFloat2(&this->position, myPosition);
 	}
 	virtual void Render() override
 	{
@@ -65,7 +67,7 @@ public:
 
 	COLORREF color;
 	GameObject* pParent = nullptr;
-	Transform offset;
+	DirectX::XMFLOAT2 offset;
 	bool isFocused = true;
 };
 
@@ -88,7 +90,10 @@ public:
 	{
 		if (pParent == nullptr) return;
 
-		this->position = pParent->position + offset;
+		DirectX::FXMVECTOR parentPosition{ DirectX::XMLoadFloat2(&pParent->position) };
+		DirectX::FXMMATRIX translateMatrix{ DirectX::XMMatrixTranslation(offset.x, offset.y, 0.f) };
+		DirectX::FXMVECTOR myPosition{ DirectX::XMVector4Transform(parentPosition, translateMatrix) };
+		DirectX::XMStoreFloat2(&this->position, myPosition);
 
 	}
 	virtual void Render() override
@@ -97,6 +102,7 @@ public:
 
 		if (isFocused)
 		{
+			
 			RenderManager::DrawRect(area + position, color);
 		}
 		else
@@ -109,7 +115,7 @@ public:
 	
 	COLORREF color;
 	GameObject* pParent = nullptr;
-	Transform offset;
+	DirectX::XMFLOAT2 offset;
 	bool isFocused = false;
 };
 

@@ -2,7 +2,7 @@
 #include "CharacterState.h"
 #include "TimeManager.h"
 #include "Bullet.h"
-BezierCurveMoveToState::BezierCurveMoveToState(Character* const _pCharacter, const Transform& _start, const Transform& _center, const Transform& _dest) :
+BezierCurveMoveToState::BezierCurveMoveToState(Character* const _pCharacter, const DirectX::XMFLOAT2& _start, const DirectX::XMFLOAT2& _center, const DirectX::XMFLOAT2& _dest) :
 	MoveToState{ _pCharacter, _start, _dest }, center{ _center }
 {
 
@@ -13,29 +13,41 @@ bool BezierCurveMoveToState::Update()
 	for (int i = 0; i < 10; ++i)
 	{
 		//프로그래스가 1이 되거나, 목적지까지 도달했으면
-		if (progress >= 0.75f && (destination - pCharacter->position).Length() < _speed)
+		DirectX::XMVECTOR destination{DirectX::XMLoadFloat2(&this->destination)};
+		DirectX::XMVECTOR characterPosition{ DirectX::XMLoadFloat2(&pCharacter->position) };
+		float length{ DirectX::XMVectorGetByIndex(DirectX::XMVector2Length(DirectX::XMVectorSubtract(destination, characterPosition)), 0) };
+		if (progress >= 0.75f && length < _speed)
 		{
-			pCharacter->position = destination;
+			pCharacter->position = this->destination;
 			//미리 지정된 다음 씬을 반환한다.
 			return true;
 		}
+		DirectX::XMVECTOR next{ XMLoadFloat2(&this->next) };
+		length = DirectX::XMVectorGetByIndex(DirectX::XMVector2Length(DirectX::XMVectorSubtract(next, characterPosition)), 0);
 		//다음 위치까지 도착하면, 다음 위치를 계산한다.
-		if ((next - pCharacter->position).Length() < _speed)
+		if (length < _speed)
 		{
-			pCharacter->position = next;
+			pCharacter->position = this->next;
 			progress += 0.001f;
-			float restTime = 1.f - progress;
+			float restTime = 1.f - progress;//(1-t)
 			//2차 베지에 곡선의 수직 계산
+			DirectX::XMVECTOR start{ DirectX::XMLoadFloat2(&this->start) };
+			DirectX::XMVECTOR center{ DirectX::XMLoadFloat2(&this->center) };
+			//(1-t){(1-t)A + tB} + +t{(1-t)B + tC}
 			next =
-				restTime * (restTime * start + progress * center) //(1-t){(1-t)A + tB}
-				+ progress * (restTime * center + progress * destination);//+t{(1-t)B + tC}
+				restTime * (restTime * start + progress * center) +
+				progress * (restTime * center + progress * destination);
+			DirectX::XMStoreFloat2(&this->next, next);
 		}
-		//몬스터와 다음 점까지 잇는 선분을 빗변으로 하는 삼각형의 각도를 구하고, 
-		Transform relativeNextPos = next - pCharacter->position;
-		float radian = atan2(relativeNextPos.y, relativeNextPos.x);
-		Matrix mat = Matrix::Rotate(radian) * Matrix::Translate(_speed, 0);
-		//해당 각도로 speed만큼 이동한다.
-		pCharacter->position += (Transform)mat;
+		//다음 좌표를 나타내는 벡터와 현재 좌표를 나타내는 벡터를 빼면, 두 벡터사이를 잇는 벡터가 나온다.
+		//그리고 그 벡터를 정규화(normalize)시키면 목적지를 가리키는 방향벡터가 된다.
+		DirectX::XMVECTOR direction = DirectX::XMVector3Normalize(next - DirectX::XMLoadFloat2(&pCharacter->position));
+		DirectX::XMFLOAT2 xy{};
+		DirectX::XMStoreFloat2(&xy, _speed * direction);
+		DirectX::XMMATRIX mat{ DirectX::XMMatrixTranslation(xy.x, xy.y, 0.f) };
+		characterPosition = DirectX::XMVector3Transform(characterPosition, mat);
+		DirectX::XMStoreFloat2(&pCharacter->position, characterPosition);
+
 	}
 	return false;
 }
@@ -67,7 +79,7 @@ bool WaitState::Update()
 	return false;
 }
 
-MoveToState::MoveToState(Character* const _pCharecter, const Transform& _start, const Transform& _dest) :
+MoveToState::MoveToState(Character* const _pCharecter, const DirectX::XMFLOAT2& _start, const DirectX::XMFLOAT2& _dest) :
 	pCharacter{ _pCharecter }, progress {0.f}, start{ _start }, destination{ _dest }
 {
 }
@@ -77,7 +89,7 @@ void MoveToState::Reset()
 	progress = 0.0f;
 }
 
-LinearMoveToState::LinearMoveToState(Character* const _pCharecter, const Transform& _start, const Transform& _dest) :
+LinearMoveToState::LinearMoveToState(Character* const _pCharecter, const DirectX::XMFLOAT2& _start, const DirectX::XMFLOAT2& _dest) :
 	MoveToState{ _pCharecter, _start, _dest }
 {
 }
@@ -88,19 +100,22 @@ bool LinearMoveToState::Update()
 	const float _speed = TimeManager::DeltaTime() * pCharacter->speed / 10.f;
 	for (int i = 0; i < 10; ++i)
 	{
+		DirectX::XMVECTOR destination{ DirectX::XMLoadFloat2(&this->destination) };
+		DirectX::XMVECTOR characterPosition{ DirectX::XMLoadFloat2(&pCharacter->position) };
+		float length{ DirectX::XMVectorGetByIndex(DirectX::XMVector2Length(DirectX::XMVectorSubtract(destination, characterPosition)), 0) };
 		//프로그래스가 1이 되거나, 목적지까지 도달했으면
-		if (progress >= 0.75f && (destination - pCharacter->position).Length() < _speed)
+		if (progress >= 0.75f && length < _speed)
 		{
-			pCharacter->position = destination;
+			pCharacter->position = this->destination;
 			//미리 지정된 다음 씬을 반환한다.
 			return true;
 		}
-		//몬스터와 다음 점까지 잇는 선분을 빗변으로 하는 삼각형의 각도를 구하고, 
-		Transform relativeNextPos = destination - pCharacter->position;
-		float radian = atan2(relativeNextPos.y, relativeNextPos.x);
-		Matrix mat = Matrix::Rotate(radian) * Matrix::Translate(_speed, 0);
-		//해당 각도로 speed만큼 이동한다.
-		pCharacter->position += (Transform)mat;
+		DirectX::XMVECTOR direction = DirectX::XMVector3Normalize(destination - DirectX::XMLoadFloat2(&pCharacter->position));
+		DirectX::XMFLOAT2 xy{};
+		DirectX::XMStoreFloat2(&xy, _speed * direction);
+		DirectX::XMMATRIX mat{ DirectX::XMMatrixTranslation(xy.x, xy.y, 0.f) };
+		characterPosition = DirectX::XMVector3Transform(characterPosition, mat);
+		DirectX::XMStoreFloat2(&pCharacter->position, characterPosition);
 	}
 	return false;
 }
@@ -113,21 +128,34 @@ FocusOnPlayerFireState::FocusOnPlayerFireState(Character* _pCharacter, float _in
 
 bool FocusOnPlayerFireState::Update()
 {
-	if (tick >= interval)
+	do
 	{
+		if (tick < interval)
+		{
+			break;
+		}
 		//사격
-		const Character* const pPlayer = (Character*) ObjectManager::GetInstance()->pPlayer;
+		Character const * const pPlayer = (Character*)ObjectManager::GetInstance()->pPlayer;
 		if (pPlayer == nullptr)
 		{
-			return FireState::Update();
+			break;
 		}
-		const Transform dpos = pPlayer->position - pCharacter->position;
-
-		const float radian = atan2f(dpos.y, dpos.x);
+		DirectX::XMVECTOR dpos =
+			DirectX::XMVector3Normalize(DirectX::XMLoadFloat2(&pPlayer->position) - DirectX::XMLoadFloat2(&pCharacter->position));
+		//기준 벡터를 하나 임시로 정의한다.
+		DirectX::XMVECTOR forward{ DirectX::XMVectorSet(1.f,0.f,0.f,0.f) };
+		//두 단위 벡터의 도트곱(내적)은 두 벡터의 끼인 각의 Cos이다 
+		auto tmp{ DirectX::XMVector3Dot(dpos, forward) };
+		float cosV = DirectX::XMVectorGetZ(tmp);
+		float radian = acosf(cosV);
+		if (pPlayer->position.y < pCharacter->position.y)
+		{
+			radian *= -1.f;
+		}
 		GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
-		MetaBullet::Initialize(bullet, BulletType::_01, pCharacter->position , radian, false);
+		MetaBullet::Initialize(bullet, BulletType::_01, pCharacter->position, radian, false);
 		tick -= interval;
-	}
+	} while (false);
 	return FireState::Update();
 }
 
@@ -164,16 +192,22 @@ bool FlowerFireState::Update()
 {
 	if (tick >= interval)
 	{
-		Transform leftTop{ (float)pCharacter->simpleCollider.left, (float)pCharacter->simpleCollider.top };
-		float length = leftTop.Length();
-		auto move = Matrix::Translate(length, 0);
-		const Transform& center = pCharacter->position;
+		float length{
+			DirectX::XMVectorGetX(
+			DirectX::XMVector2Length(DirectX::XMVectorSet((float)pCharacter->simpleCollider.left, (float)pCharacter->simpleCollider.top, 0.f, 0.f))) };
+		//auto move = Matrix::Translate(length, 0);
+		const DirectX::XMVECTOR center{ DirectX::XMLoadFloat2(&pCharacter->position) };
+		DirectX::XMMATRIX parent{ DirectX::XMMatrixTranslationFromVector(center) };
 		constexpr int BULLET_COUNT = 22;
 		//사격
 		for (int i = 0; i < BULLET_COUNT; ++i)
 		{
 			const float radian = PI * i * (360 / BULLET_COUNT) / 180;
-			Transform pos = static_cast<Transform>(Matrix::Translate(center.x, center.y) * Matrix::Rotate(radian) * move);
+			DirectX::XMVECTOR v{};
+			DirectX::XMFLOAT2 pos{};
+			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
+			v = DirectX::XMVector3Transform(v, mat);
+			DirectX::XMStoreFloat2(&pos, v);
 			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_03, pos, radian, false);
 		}
@@ -191,16 +225,21 @@ bool FlowerCurvesFireState::Update()
 {
 	if (tick >= interval)
 	{
-		Transform leftTop{ (float)pCharacter->simpleCollider.left, (float)pCharacter->simpleCollider.top };
-		float length = leftTop.Length();
-		auto move = Matrix::Translate(length, 0);
-		const Transform& center = pCharacter->position;
+		float length{
+			DirectX::XMVectorGetX(
+			DirectX::XMVector2Length(DirectX::XMVectorSet((float)pCharacter->simpleCollider.left, (float)pCharacter->simpleCollider.top, 0.f, 0.f))) };
+		const DirectX::XMVECTOR center{ DirectX::XMLoadFloat2(&pCharacter->position) };
+		DirectX::XMMATRIX parent{ DirectX::XMMatrixTranslationFromVector(center) };
 		constexpr int BULLET_COUNT = 22;
 		//사격
 		for (int i = 0; i < BULLET_COUNT; ++i)
 		{
 			const float radian = PI * i * (360 / BULLET_COUNT) / 180;
-			Transform pos = static_cast<Transform>(Matrix::Translate(center.x, center.y) * Matrix::Rotate(radian) * move);
+			DirectX::XMVECTOR v{};
+			DirectX::XMFLOAT2 pos{};
+			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
+			v = DirectX::XMVector3Transform(v, mat);
+			DirectX::XMStoreFloat2(&pos, v);
 			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_02, pos, radian, false);
 		}

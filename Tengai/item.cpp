@@ -7,7 +7,7 @@ Item::Item():
     type = ObjectType::ITEM;
 }
 
-Item::Item(ItemType _type, const Transform& pos):
+Item::Item(ItemType _type, const DirectX::XMFLOAT2& pos):
     itemType{_type}
 {
     type = ObjectType::ITEM;
@@ -22,7 +22,7 @@ Item::Item(ItemType _type, const Transform& pos):
     Bind(EventId::COLLISION_OBJ, &Item::OnCollision);
 }
 
-GameObject* Item::Initialize(GameObject* const obj, ItemType _type, const Transform& pos)
+GameObject* Item::Initialize(GameObject* const obj, ItemType _type, const DirectX::XMFLOAT2& pos)
 {
     if (obj->type == ObjectType::ITEM)
     {
@@ -63,9 +63,9 @@ void Item::OnCollision(const CollisionEvent& event)
 
 void Item::MakeNewDest()
 {
-    Transform pos{ position };
-    Transform center{ rand() % (WINDOW_WIDTH * 10) / 10.f , rand() % (WINDOW_HEIGHT * 10) / 10.f };
-    Transform dest{ rand() % (WINDOW_WIDTH * 10) / 10.f , rand() % (WINDOW_HEIGHT * 10) / 10.f };
+    DirectX::XMFLOAT2 pos{ position };
+    DirectX::XMFLOAT2 center{ rand() % (WINDOW_WIDTH * 10) / 10.f , rand() % (WINDOW_HEIGHT * 10) / 10.f };
+    DirectX::XMFLOAT2 dest{ rand() % (WINDOW_WIDTH * 10) / 10.f , rand() % (WINDOW_HEIGHT * 10) / 10.f };
     //Character* const _pCharecter, const Transform& _start, const Transform& _center, const Transform& _dest
     if (pState != nullptr)
     {
@@ -76,7 +76,7 @@ void Item::MakeNewDest()
     pState->Reset();
 }
 
-HealItem::HealItem(ItemType _type, const Transform& pos):
+HealItem::HealItem(ItemType _type, const DirectX::XMFLOAT2& pos):
     Item{ _type, pos }
 {
 }
@@ -90,7 +90,7 @@ void HealItem::Render()
     RenderManager::DrawRect(simpleCollider + position, RGB(128, 255, 128));
 }
 
-SkillItem::SkillItem(ItemType _type, const Transform& pos):
+SkillItem::SkillItem(ItemType _type, const DirectX::XMFLOAT2& pos):
     Item{ _type, pos }
 {
 }

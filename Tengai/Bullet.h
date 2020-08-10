@@ -16,7 +16,7 @@ enum class BulletType
 class MetaBullet
 {
 public:
-	static void Initialize(GameObject* _pObject, BulletType _type, const Transform & pos, float rad, bool _isAlias);
+	static void Initialize(GameObject* _pObject, BulletType _type, const DirectX::XMFLOAT2 & pos, float rad, bool _isAlias);
 };
 class Bullet : public Character
 {

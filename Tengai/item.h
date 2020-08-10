@@ -15,8 +15,8 @@ class Item : public Character
 {
 public:
 	Item();
-	Item(ItemType _type, const Transform& pos);
-	static GameObject* Initialize(GameObject* const obj, ItemType _type, const Transform& pos);
+	Item(ItemType _type, const DirectX::XMFLOAT2& pos);
+	static GameObject* Initialize(GameObject* const obj, ItemType _type, const DirectX::XMFLOAT2& pos);
 	virtual ~Item();
 	virtual void Update() override;
 	void OnCollision(const CollisionEvent& event);
@@ -27,14 +27,14 @@ public:
 class HealItem : public Item
 {
 public:
-	HealItem(ItemType _type, const Transform& pos);
+	HealItem(ItemType _type, const DirectX::XMFLOAT2& pos);
 	virtual ~HealItem();
 	virtual void Render() override;
 };
 class SkillItem : public Item
 {
 public:
-	SkillItem(ItemType _type, const Transform& pos);
+	SkillItem(ItemType _type, const DirectX::XMFLOAT2& pos);
 	virtual ~SkillItem();
 	virtual void Render() override;
 };

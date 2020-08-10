@@ -13,7 +13,7 @@ BackGround::BackGround()
 	
 	for (int i = 0; i < 4; i++)
 	{
-		Transform pos = { float(WINDOW_WIDTH + (i * 300)), float(rand() % 200) };
+		DirectX::XMFLOAT2 pos = { float(WINDOW_WIDTH + (i * 300)), float(rand() % 200) };
 		UI* cloud = new Cloud;
 		cloud->position = pos;
 		clouds.push_back(cloud);
@@ -94,7 +94,7 @@ void Cloud::Update()
 void Cloud::Render()
 {
 	float radian;
-	Transform pos;
+	DirectX::XMFLOAT2 pos;
 	COLORREF colorref;
 	for (int i = 0; i < 10; i++)
 	{

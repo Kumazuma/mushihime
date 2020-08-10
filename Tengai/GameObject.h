@@ -31,8 +31,7 @@ public:
 	virtual void Render() = 0;
 	virtual void OnCollision(const GameObject& _other) {};
 	virtual void Die();
-
-	Transform position{ 0.f, 0.f };
+	DirectX::XMFLOAT2 position;
 	int width = 0;
 	int height = 0;
 	

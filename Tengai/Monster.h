@@ -17,8 +17,8 @@ class Monster :
 	//method
 public:
 	Monster();
-	static GameObject* Initialize(GameObject* const self, MonsterType monsterType, const Transform& firstPos);
-	void Initialize(MonsterType monsterType, const Transform& firstPos);
+	static GameObject* Initialize(GameObject* const self, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos);
+	void Initialize(MonsterType monsterType, const DirectX::XMFLOAT2& firstPos);
 	~Monster();
 	void Update() override;
 	void Render() override;

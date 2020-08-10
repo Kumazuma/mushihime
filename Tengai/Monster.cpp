@@ -10,7 +10,7 @@ Monster::Monster()
 	currentMoveState = nullptr;
 }
 //우선 클리어
-GameObject* Monster::Initialize(GameObject* const obj, MonsterType monsterType, const Transform& firstPos)
+GameObject* Monster::Initialize(GameObject* const obj, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos)
 {
 	if (obj->type == ObjectType::MONSTER)
 	{
@@ -20,7 +20,7 @@ GameObject* Monster::Initialize(GameObject* const obj, MonsterType monsterType, 
 	return obj;
 }
 
-void Monster::Initialize(const MonsterType _monsterType, const Transform& firstPos)
+void Monster::Initialize(const MonsterType _monsterType, const DirectX::XMFLOAT2& firstPos)
 {
 	Bind(EventId::PASS_TIME, &Monster::OnShow);
 	Bind(EventId::COLLISION_OBJ, &Monster::OnCollision);
@@ -42,7 +42,7 @@ void Monster::Initialize(const MonsterType _monsterType, const Transform& firstP
 	{
 		//화면 아래에서 나타나서 화면 위로 사라지는 몬스터
 		moveStateList.push_back(
-			new BezierCurveMoveToState{ this, firstPos + Transform{0.f, 0.f} ,firstPos + Transform{-400, -1 * WINDOW_HEIGHT / 2 } ,firstPos + Transform{0,  -1 * WINDOW_HEIGHT} }
+			new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{0.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-400, -1 * WINDOW_HEIGHT / 2 } ,firstPos + DirectX::XMFLOAT2{0,  -1 * WINDOW_HEIGHT} }
 		);
 		moveStateList.push_back(
 			new DeleteState{ this }
@@ -68,13 +68,13 @@ void Monster::Initialize(const MonsterType _monsterType, const Transform& firstP
 	{
 		//화면 오른쪽에서 나타나서 화면을 순회하는 몬스터
 		moveStateList.push_back(
-			new BezierCurveMoveToState{ this, firstPos + Transform{0.f, 0.f} ,firstPos + Transform{-200.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + Transform{-400.f,  0.f} }
+			new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{0.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-200.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + DirectX::XMFLOAT2{-400.f,  0.f} }
 		);
 		moveStateList.push_back(
-			new BezierCurveMoveToState{ this, firstPos + Transform{-400.f, 0.f} ,firstPos + Transform{-150.f, 1.f * WINDOW_HEIGHT / 4 } ,firstPos + Transform{-100.f,  0.f} }
+			new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{-400.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-150.f, 1.f * WINDOW_HEIGHT / 4 } ,firstPos + DirectX::XMFLOAT2{-100.f,  0.f} }
 		);
 		moveStateList.push_back(
-			new BezierCurveMoveToState{ this, firstPos + Transform{-100.f, 0.f} ,firstPos + Transform{-150.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + Transform{-400.f,  0.f} }
+			new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{-100.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-150.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + DirectX::XMFLOAT2{-400.f,  0.f} }
 		);
 		fireStateList.push_back(
 			new WaitState{ 0.1f });
@@ -99,13 +99,13 @@ void Monster::Initialize(const MonsterType _monsterType, const Transform& firstP
 	case MonsterType::BOSS:
 		//화면 오른쪽에서 나타나서 화면을 순회하는 몬스터
 		moveStateList.push_back(
-			new BezierCurveMoveToState{ this, firstPos + Transform{0.f, 0.f} ,firstPos + Transform{-200.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + Transform{-400.f,  0.f} }
+			new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{0.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-200.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + DirectX::XMFLOAT2{-400.f,  0.f} }
 		);
 		moveStateList.push_back(
-			new BezierCurveMoveToState{ this, firstPos + Transform{-400.f, 0.f} ,firstPos + Transform{-150.f, 1.f * WINDOW_HEIGHT / 4 } ,firstPos + Transform{-100.f,  0.f} }
+			new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{-400.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-150.f, 1.f * WINDOW_HEIGHT / 4 } ,firstPos + DirectX::XMFLOAT2{-100.f,  0.f} }
 		);
 		moveStateList.push_back(
-			new BezierCurveMoveToState{ this, firstPos + Transform{-100.f, 0.f} ,firstPos + Transform{-150.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + Transform{-400.f,  0.f} }
+			new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{-100.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-150.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + DirectX::XMFLOAT2{-400.f,  0.f} }
 		);
 		fireStateList.push_back(
 			new WaitState{ 0.1f });

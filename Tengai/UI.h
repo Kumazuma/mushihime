@@ -10,7 +10,7 @@ public:
 	virtual void Show() {};
 	virtual void Hide() {};
 	GameObject* pParent = nullptr;
-	Transform localPosition;
+	DirectX::XMFLOAT2 localPosition;
 	RECT area;
 	COLORREF color = RGB(255, 255, 255);
 };

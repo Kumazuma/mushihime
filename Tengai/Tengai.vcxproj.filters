@@ -83,9 +83,6 @@
     <ClInclude Include="CharacterState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="event.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -154,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="TitleUI.h">
       <Filter>01.GameObject\2_UI\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +234,9 @@
     </ClCompile>
     <ClCompile Include="TitleUI.cpp">
       <Filter>01.GameObject\2_UI\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

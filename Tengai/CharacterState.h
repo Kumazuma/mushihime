@@ -13,29 +13,29 @@ struct CharacterState
 class MoveToState :public CharacterState
 {
 public:
-	MoveToState(Character* const _pCharecter, const Transform& _start, const Transform& _dest);
+	MoveToState(Character* const _pCharecter, const DirectX::XMFLOAT2& _start, const DirectX::XMFLOAT2& _dest);
 	void Reset() override;
 	float progress;/*[0 - 1]*/
 	Character* pCharacter;
-	Transform destination;
-	Transform start;
+	DirectX::XMFLOAT2 destination;
+	DirectX::XMFLOAT2 start;
 };
 //특정한 위치를 직선으로 이동한다.
 class LinearMoveToState : public MoveToState
 {
 public:
-	LinearMoveToState(Character* const _pCharecter, const Transform& _start, const Transform& _dest);
+	LinearMoveToState(Character* const _pCharecter, const DirectX::XMFLOAT2& _start, const DirectX::XMFLOAT2& _dest);
 	bool Update() override;
 };
 //특정한 위치를 베지어 곡선을 이용하여 이동한다.
 class BezierCurveMoveToState :public MoveToState
 {
 public:
-	BezierCurveMoveToState(Character* const _pCharecter, const Transform& _start, const Transform& _center, const Transform& _dest);
+	BezierCurveMoveToState(Character* const _pCharecter, const DirectX::XMFLOAT2& _start, const DirectX::XMFLOAT2& _center, const DirectX::XMFLOAT2& _dest);
 	bool Update() override;
 	void Reset() override;
-	Transform center;
-	Transform next;
+	DirectX::XMFLOAT2 center;
+	DirectX::XMFLOAT2 next;
 };
 class DeleteState : public CharacterState
 {

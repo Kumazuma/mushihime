@@ -26,14 +26,15 @@ void Bullet::Update()
 
 void Bullet::Move()
 {
-	const float _speed = TimeManager::DeltaTime()* speed / 10.f;
-	for (int i = 0; i < 10; ++i)
-	{
-
-		Matrix mat = Matrix::Rotate(radian) * Matrix::Translate(_speed, 0);
-		//해당 각도로 speed만큼 이동한다.
-		position += (Transform)mat;
-	}
+	const float moveDistance = TimeManager::DeltaTime()* speed;
+	DirectX::XMVECTOR pos{DirectX::XMLoadFloat2(&position)};
+	auto mat{
+		DirectX::XMMatrixTranslation(moveDistance, 0.f, 0.f) *
+		DirectX::XMMatrixRotationZ(radian) * 
+		DirectX::XMMatrixTranslationFromVector(pos)
+	};
+	pos = DirectX::XMVector3Transform(DirectX::XMVectorSet(0.f, 0.f, 0.f, 1.f), mat);
+	DirectX::XMStoreFloat2(&position, pos);
 }
 
 void Bullet::Render()
@@ -55,7 +56,7 @@ void Bullet::OnCollision(const CollisionEvent& event)
 	}
 }
 
-void MetaBullet::Initialize(GameObject* _pObject, BulletType _type, const Transform& pos, float rad, bool _isAlias)
+void MetaBullet::Initialize(GameObject* _pObject, BulletType _type, const DirectX::XMFLOAT2& pos, float rad, bool _isAlias)
 {
 	if (_pObject == nullptr)
 	{
@@ -198,7 +199,7 @@ Bullet06::Bullet06()
 
 void Bullet06::Update()
 {
-	Transform direction;
+	DirectX::XMFLOAT2 direction{};
 	
 	radian2 += PI * 1.f * 15.f / 180;
 	direction.x += cosf(radian) +cosf(radian2);
