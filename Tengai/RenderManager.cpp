@@ -26,6 +26,21 @@ RenderManager::~RenderManager()
 	{
 		DeleteObject(hBitmap);
 	}
+	for (auto& item : cachedBrushs)
+	{
+		DeleteObject(item.second);
+	}
+	for (auto& item : cachedPen)
+	{
+		DeleteObject(item.second);
+	}
+	for (auto& item : cachedFonts)
+	{
+		DeleteObject(item.second);
+	}
+	cachedFonts.clear();
+	cachedPen.clear();
+	cachedBrushs.clear();
 }
 
 RenderManager * RenderManager::GetInstance()
@@ -50,33 +65,35 @@ void RenderManager::DrawRect(const RECT& _rc)
 
 void RenderManager::DrawRect(const RECT& _rc, COLORREF _innerColor)
 {
-	HBRUSH hBrush = CreateSolidBrush(_innerColor);
-	HGDIOBJ oldBrush = SelectObject(pRenderManager->hBackBufferDC, hBrush);
+	HBRUSH hBrush{ pRenderManager->GetBrush(_innerColor) };
+	HGDIOBJ oldBrush{ SelectObject(pRenderManager->hBackBufferDC, hBrush) };
+	
 	Rectangle(pRenderManager->hBackBufferDC, _rc.left, _rc.top, _rc.right, _rc.bottom);
+
 	SelectObject(pRenderManager->hBackBufferDC, oldBrush);
-	DeleteObject(hBrush);
 }
 
 void RenderManager::DrawRect(const RECT& _rc, COLORREF _innerColor, COLORREF _outlineColor)
 {
-	HBRUSH hBrush = CreateSolidBrush(_innerColor);
-	HPEN hPen = CreatePen(PS_SOLID, 1, _outlineColor);
+
+	HBRUSH hBrush{ pRenderManager->GetBrush(_innerColor) };
+	HPEN hPen{ pRenderManager->GetPen(_outlineColor) };
 	HGDIOBJ oldBrush = SelectObject(pRenderManager->hBackBufferDC, hBrush);
 	HGDIOBJ oldPen = SelectObject(pRenderManager->hBackBufferDC, hPen);
+
 	Rectangle(pRenderManager->hBackBufferDC, _rc.left, _rc.top, _rc.right, _rc.bottom);
+
 	SelectObject(pRenderManager->hBackBufferDC, oldBrush);
 	SelectObject(pRenderManager->hBackBufferDC, oldPen);
-	DeleteObject(hBrush);
-	DeleteObject(hPen);
+
 }
 
 void RenderManager::DrawSimpleCollider(const RECT& _rc, COLORREF _outlineColor)
 {
-	HPEN hPen = CreatePen(PS_SOLID, 1, _outlineColor);
+	HPEN hPen{ pRenderManager->GetPen(_outlineColor) };
 	HGDIOBJ oldPen = SelectObject(pRenderManager->hBackBufferDC, hPen);
 	Rectangle(pRenderManager->hBackBufferDC, _rc.left, _rc.top, _rc.right, _rc.bottom);
 	SelectObject(pRenderManager->hBackBufferDC, oldPen);
-	DeleteObject(hPen);
 }
 
 void RenderManager::DrawCircle(const RECT& _rc)
@@ -86,15 +103,13 @@ void RenderManager::DrawCircle(const RECT& _rc)
 
 void RenderManager::DrawCircle(const RECT& _rc, COLORREF _innerColor, COLORREF _outlineColor)
 {
-	HBRUSH hBrush = CreateSolidBrush(_innerColor);
-	HPEN hPen = CreatePen(PS_SOLID, 1, _outlineColor);
+	HBRUSH hBrush{ pRenderManager->GetBrush(_innerColor) };
+	HPEN hPen{ pRenderManager->GetPen(_outlineColor) };
 	HGDIOBJ oldBrush = SelectObject(pRenderManager->hBackBufferDC, hBrush);
 	HGDIOBJ oldPen = SelectObject(pRenderManager->hBackBufferDC, hPen);
 	Ellipse(pRenderManager->hBackBufferDC, _rc.left, _rc.top, _rc.right, _rc.bottom);
 	SelectObject(pRenderManager->hBackBufferDC, oldBrush);
 	SelectObject(pRenderManager->hBackBufferDC, oldPen);
-	DeleteObject(hBrush);
-	DeleteObject(hPen);
 }
 
 void RenderManager::DrawString(const WCHAR* _str, int _x, int _y)
@@ -104,12 +119,15 @@ void RenderManager::DrawString(const WCHAR* _str, int _x, int _y)
 
 void RenderManager::DrawString(const WCHAR* _str, int _x, int _y, const WCHAR* _font, int _fontSize, COLORREF _color)
 {
-	HFONT hFont = CreateFont(50, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0, VARIABLE_PITCH | FF_ROMAN, _font);
+	if (_font == nullptr)
+	{
+		_font = L"";
+	}
+	HFONT hFont{ pRenderManager->GetFont(_font, _fontSize) };
 	HFONT oldFont = (HFONT)SelectObject(pRenderManager->hBackBufferDC, hFont);
 	COLORREF oldColor = SetTextColor(pRenderManager->hBackBufferDC, _color);
 	TextOutW(pRenderManager->hBackBufferDC, _x, _y, _str, wcslen(_str));
 	SelectObject(pRenderManager->hBackBufferDC, oldFont);
-	DeleteObject(hFont);
 	SetTextColor(pRenderManager->hBackBufferDC, oldColor);
 }
 
@@ -142,11 +160,10 @@ void RenderManager::DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3], COLORREF
 		static_cast<int>(it->y)
 	);
 	EndPath(hDC);
-	HBRUSH hBrush{ CreateSolidBrush(color) };
+	HBRUSH hBrush{ pRenderManager->GetBrush(color)  };
 	HBRUSH hOldBrush{ (HBRUSH)SelectObject(hDC, hBrush) };
 	StrokeAndFillPath(hDC);
 	SelectObject(hDC, hOldBrush);
-	DeleteObject(hBrush);
 }
 
 void RenderManager::DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3])
@@ -180,6 +197,27 @@ void RenderManager::DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3])
 	StrokeAndFillPath(hDC);
 }
 
+void RenderManager::DrawTriangle(const DirectX::XMVECTOR pt1, const DirectX::XMVECTOR pt2, const DirectX::XMVECTOR pt3)
+{
+	HDC hDC{ pRenderManager->hBackBufferDC };
+	BeginPath(hDC);
+	DirectX::XMFLOAT2 triangle[3]{};
+	DirectX::XMStoreFloat2(triangle + 0, pt1);
+	DirectX::XMStoreFloat2(triangle + 1, pt2);
+	DirectX::XMStoreFloat2(triangle + 2, pt3);
+	DrawTriangle(triangle);
+}
+
+void RenderManager::DrawTriangle(const DirectX::XMVECTOR(&points)[3])
+{
+	DirectX::XMFLOAT2 triangle[3]{};
+	for (int i = 0; i < 3; ++i)
+	{
+		DirectX::XMStoreFloat2(triangle + i, points[i]);
+	}
+	DrawTriangle(triangle);
+}
+
 void RenderManager::Present()
 {
 	BitBlt(pRenderManager->hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT,
@@ -190,4 +228,42 @@ void RenderManager::Clear()
 {
 	FillRect(pRenderManager->hBackBufferDC, &pRenderManager->area,
 		(HBRUSH)GetStockObject(WHITE_BRUSH));
+}
+
+HBRUSH RenderManager::GetBrush(COLORREF color)
+{
+	auto it{ cachedBrushs.find(color) };
+	if (it == cachedBrushs.end())
+	{
+		it = cachedBrushs.emplace(color, CreateSolidBrush(color)).first;
+	}
+	return it->second;
+}
+
+HPEN RenderManager::GetPen(COLORREF color)
+{
+	auto it{ cachedPen.find(color) };
+	if (it == cachedPen.end())
+	{
+		it = cachedPen.emplace(color, CreatePen(PS_SOLID, 1, color)).first;
+	}
+	return it->second;
+}
+
+HFONT RenderManager::GetFont(const std::wstring& fontName, size_t fontSize)
+{
+	int radix{ fontSize == 0 ? 0 : static_cast<int>(log10(static_cast<float>(fontSize))) };
+	std::wstring key{ fontName };
+	for (int i{ radix }; i >= 0; --i)
+	{
+		int s{ static_cast<int>(fontSize / powf(10, i)) % 10 };
+		key.push_back(L'0' + s);
+	}
+	auto it{ cachedFonts.find(key) };
+	if (it == cachedFonts.end())
+	{
+		HFONT hFont = CreateFontW(fontSize, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0, VARIABLE_PITCH | FF_ROMAN, fontName.c_str());
+		it = cachedFonts.emplace(key, hFont).first;
+	}
+	return it->second;
 }
