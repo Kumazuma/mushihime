@@ -117,7 +117,7 @@ void RenderManager::DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3], COLORREF
 {
 	//TODO: now not implementation color fill
 	HDC hDC{ pRenderManager->hBackBufferDC };
-	//BeginPath(hDC);
+	BeginPath(hDC);
 	const DirectX::XMFLOAT2* it{ triangle };
 	const DirectX::XMFLOAT2* const end{ triangle + 3 };
 	MoveToEx(
@@ -141,12 +141,18 @@ void RenderManager::DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3], COLORREF
 		static_cast<int>(it->x),
 		static_cast<int>(it->y)
 	);
+	EndPath(hDC);
+	HBRUSH hBrush{ CreateSolidBrush(color) };
+	HBRUSH hOldBrush{ (HBRUSH)SelectObject(hDC, hBrush) };
+	StrokeAndFillPath(hDC);
+	SelectObject(hDC, hOldBrush);
+	DeleteObject(hBrush);
 }
 
 void RenderManager::DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3])
 {
 	HDC hDC{ pRenderManager->hBackBufferDC };
-	//BeginPath(hDC);
+	BeginPath(hDC);
 	const DirectX::XMFLOAT2* it{ triangle };
 	const DirectX::XMFLOAT2* const end{ triangle + 3 };
 	MoveToEx(
@@ -170,9 +176,8 @@ void RenderManager::DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3])
 		static_cast<int>(it->x),
 		static_cast<int>(it->y)
 	);
-	//EndPath(hDC);
-	//HRGN region = PathToRegion(hDC);
-
+	EndPath(hDC);
+	StrokeAndFillPath(hDC);
 }
 
 void RenderManager::Present()
