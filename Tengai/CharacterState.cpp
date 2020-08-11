@@ -241,7 +241,7 @@ bool FlowerCurvesFireState::Update()
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
 			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
-			MetaBullet::Initialize(bullet, BulletType::_02, pos, radian, false);
+			MetaBullet::Initialize(bullet, BulletType::_02, pos, radian, false); 
 		}
 		tick -= interval;
 	}
@@ -290,7 +290,7 @@ bool PlayerBasicAttackState::Update()
 		if (tick >= interval)
 		{
 			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
-			MetaBullet::Initialize(bullet, BulletType::_04, pCharacter->position, 0, true);
+			MetaBullet::Initialize(bullet, BulletType::_04, pCharacter->position, -1.f * 90.f * 3.14f / 180, true);
 			tick = 0;
 		}
 		
@@ -311,4 +311,70 @@ bool PlayerAdditionalAttackState::Update()
 	}
 	PlayerBasicAttackState::Update();
 	return false;
+}
+
+UniqueFlowerFireState::UniqueFlowerFireState(Character* pCharacter, float _interval, float _time):
+	FireState{ pCharacter, _interval, _time }
+{
+}
+
+bool UniqueFlowerFireState::Update()
+{
+	if (tick >= interval)
+	{
+		float length{
+			DirectX::XMVectorGetX(
+			DirectX::XMVector2Length(DirectX::XMVectorSet((float)pCharacter->simpleCollider.left, (float)pCharacter->simpleCollider.top, 0.f, 0.f))) };
+
+		const DirectX::XMVECTOR center{ DirectX::XMLoadFloat2(&pCharacter->position) };
+		DirectX::XMMATRIX parent{ DirectX::XMMatrixTranslationFromVector(center) };
+		constexpr int BULLET_COUNT = 22;
+		//사격
+		for (int i = 0; i < BULLET_COUNT; ++i)
+		{
+			const float radian = PI * i * (360 / BULLET_COUNT) / 180;
+			DirectX::XMVECTOR v{};
+			DirectX::XMFLOAT2 pos{};
+			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
+			v = DirectX::XMVector3Transform(v, mat);
+			DirectX::XMStoreFloat2(&pos, v);
+			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+			MetaBullet::Initialize(bullet, BulletType::_07, pos, radian, true);
+		}
+		tick -= interval;
+	}
+	return FireState::Update();
+}
+
+UniqueWarmFireState::UniqueWarmFireState(Character* pCharacter, float _interval, float _time):
+	FireState{ pCharacter, _interval, _time }
+{
+}
+
+bool UniqueWarmFireState::Update()
+{
+	if (tick >= interval)
+	{
+		float length{
+			DirectX::XMVectorGetX(
+			DirectX::XMVector2Length(DirectX::XMVectorSet((float)pCharacter->simpleCollider.left, (float)pCharacter->simpleCollider.top, 0.f, 0.f))) };
+
+		const DirectX::XMVECTOR center{ DirectX::XMLoadFloat2(&pCharacter->position) };
+		DirectX::XMMATRIX parent{ DirectX::XMMatrixTranslationFromVector(center) };
+		constexpr int BULLET_COUNT = 22;
+		//사격
+		for (int i = 0; i < BULLET_COUNT; ++i)
+		{
+			const float radian = PI * i * (360 / BULLET_COUNT) / 180;
+			DirectX::XMVECTOR v{};
+			DirectX::XMFLOAT2 pos{};
+			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
+			v = DirectX::XMVector3Transform(v, mat);
+			DirectX::XMStoreFloat2(&pos, v);
+			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+			MetaBullet::Initialize(bullet, BulletType::_08, pos, radian, true);
+		}
+		tick -= interval;
+	}
+	return FireState::Update();
 }

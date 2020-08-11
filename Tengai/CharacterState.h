@@ -90,6 +90,21 @@ public:
 	FlowerCurvesFireState(Character* pCharacter, float _interval, float _time = 9999.f);
 	bool Update() override;
 };
+
+class UniqueFlowerFireState : public FireState
+{
+public:
+	UniqueFlowerFireState(Character* pCharacter, float _interval, float _time = 9999.f);
+	bool Update() override;
+};
+
+class UniqueWarmFireState : public FireState
+{
+public:
+	UniqueWarmFireState(Character* pCharacter, float _interval, float _time = 9999.f);
+	bool Update() override;
+};
+
 //플레이어의 기본 공격
 class PlayerBasicAttackState : public FireState
 {

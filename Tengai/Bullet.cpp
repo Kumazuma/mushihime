@@ -94,6 +94,15 @@ void MetaBullet::Initialize(GameObject* _pObject, BulletType _type, const Direct
 		pBullet->~Bullet();
 		new(pBullet) Bullet06{};
 		break;
+	case BulletType::_07:
+		pBullet->~Bullet();
+		new(pBullet) Bullet07{};
+		break;
+	case BulletType::_08:
+		pBullet->~Bullet();
+		new(pBullet) Bullet08{};
+		break;
+		
 	}
 	pBullet->uid = uid;
 	pBullet->position = pos;
@@ -167,7 +176,7 @@ void Bullet04::Update()
 
 void Bullet04::Render()
 {
-	RenderManager::DrawCircle(RECT{ -30, -5, 30, 5 } + position, RGB(100, 200, 255), RGB(0, 0, 255));
+	RenderManager::DrawCircle(RECT{ -5, -30, 5, 30 } + position, RGB(100, 200, 255), RGB(0, 0, 255));
 }
 
 Bullet05::Bullet05()
@@ -180,8 +189,8 @@ Bullet05::Bullet05()
 void Bullet05::Update()
 {
 	radian += PI * 1.f * 15.f / 180;
-	position.x += speed * TimeManager::DeltaTime();
-	position.y += 15.f * sinf(radian);
+	position.x += 10.f * sinf(radian);
+	position.y -= speed * TimeManager::DeltaTime();
 	Bullet::Update();
 }
 
@@ -212,4 +221,72 @@ void Bullet06::Update()
 void Bullet06::Render()
 {
 	RenderManager::DrawCircle(RECT{ -5, -5, 5, 5 } +position, RGB(200, 100, 200), RGB(0, 0, 200));
+}
+
+Bullet07::Bullet07()
+{
+	hp = 999;
+	speed = 200;
+	colliders.push_back(RECT{ -3,-3,3, 3 });
+	m_fStackTime = 0.f;
+}
+
+void Bullet07::Update()
+{
+	m_fStackTime += TimeManager::GetInstance()->DeltaTime();
+
+	if (m_fStackTime > 1.5f)
+	{
+		Move();
+	}
+	else
+	{
+		radian += PI * 1.f * 25.f / 180;
+		DirectX::XMVECTOR pos{ DirectX::XMLoadFloat2(&position) };
+		auto mat{
+			DirectX::XMMatrixTranslation(30.f, 0.f, 0.f) *
+			DirectX::XMMatrixRotationZ(radian) *
+			DirectX::XMMatrixTranslationFromVector(pos)
+		};
+		pos = DirectX::XMVector3Transform(DirectX::XMVectorSet(0.f, 0.f, 0.f, 1.f), mat);
+		DirectX::XMStoreFloat2(&position, pos);
+	}
+
+	Bullet::Update();
+}
+
+void Bullet07::Render()
+{
+	RenderManager::DrawCircle(RECT{ -4, -4, 4, 4 } + position, RGB(255, 130, 0), RGB(255, 0, 0));
+}
+
+Bullet08::Bullet08()
+{
+	hp = 999;
+	speed = 200;
+	colliders.push_back(RECT{ -3,-3,3, 3 });
+	m_fStackTime = 0.f;
+}
+
+void Bullet08::Update()
+{
+	m_fStackTime += TimeManager::GetInstance()->DeltaTime();
+
+	if (m_fStackTime > 1.5f)
+	{
+		Move();
+	}
+	else
+	{
+		radian += PI * 1.f * 15.f / 180;
+		position.x += 3.f * sinf(radian);
+		position.y -= speed * TimeManager::DeltaTime();
+	}
+
+	Bullet::Update();
+}
+
+void Bullet08::Render()
+{
+	RenderManager::DrawCircle(RECT{ -4, -4, 4, 4 } + position, RGB(255, 130, 0), RGB(255, 0, 0));
 }

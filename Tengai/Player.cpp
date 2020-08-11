@@ -8,7 +8,7 @@
 #include "PauseBox.h"
 Player::Player()
 {
-	position = { 50, 50 };
+	position = { WINDOW_WIDTH >> 1, WINDOW_HEIGHT - 50 };
 	speed = 250;
 	width = 30;
 	height = 30;
@@ -75,7 +75,26 @@ void Player::Update()
 	{
 		SpecialMove();
 	}
+	if (InputManager::GetKey('F'))
+	{
+		if (pFireState)
+		{
+			delete pFireState;
+			pFireState = nullptr;
+		}
 
+		pFireState = new UniqueFlowerFireState{ this, 0.2f, 2.f };
+	}
+	if (InputManager::GetKey('G'))
+	{
+		if (pFireState)
+		{
+			delete pFireState;
+			pFireState = nullptr;
+		}
+
+		pFireState = new UniqueWarmFireState{ this, 0.2f, 2.f };
+	}
 
 	UpdateSpecialMove();
 	pFireState->Update();
@@ -84,6 +103,9 @@ void Player::Update()
 
 void Player::Render()
 {
+	RECT rcInvalid = { -40, -40 , 40, 40 };
+
+	RenderManager::DrawRect(rcInvalid + position);
 	RenderManager::DrawRect(simpleCollider + position, RGB(56, 68, 255));
 }
 

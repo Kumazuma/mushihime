@@ -10,6 +10,8 @@ enum class BulletType
 	_04,
 	_05,
 	_06,
+	_07,
+	_08,
 
 	END
 };
@@ -76,4 +78,25 @@ public:
 	Bullet06();
 	virtual void Update() override;
 	virtual void Render() override;
+};
+class Bullet07 : public Bullet
+{
+public:
+	Bullet07();
+	virtual void Update() override;
+	virtual void Render() override;
+
+private:
+	float m_fStackTime;
+};
+
+class Bullet08 : public Bullet
+{
+public:
+	Bullet08();
+	virtual void Update() override;
+	virtual void Render() override;
+
+private:
+	float m_fStackTime;
 };
