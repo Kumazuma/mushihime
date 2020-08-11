@@ -8,6 +8,7 @@ enum class MonsterType
 	MOB01,
 	MOB02,
 	BOSS,
+	STAR,
 	END
 };
 
@@ -32,5 +33,7 @@ public:
 	CharacterState* currentMoveState;
 	std::vector<CharacterState*> moveStateList;
 	std::vector<CharacterState*> fireStateList;
+	DirectX::XMVECTOR m_P[3];
+	DirectX::XMVECTOR m_Q[3];
 };
 

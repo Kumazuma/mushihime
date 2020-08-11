@@ -180,6 +180,78 @@ void RenderManager::DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3])
 	StrokeAndFillPath(hDC);
 }
 
+
+void RenderManager::DrawTriangle(const DirectX::XMVECTOR pt1, const DirectX::XMVECTOR pt2, const DirectX::XMVECTOR pt3)
+{
+	HDC hDC{ pRenderManager->hBackBufferDC };
+	BeginPath(hDC);
+	DirectX::XMFLOAT2 triangle[3]{};
+	DirectX::XMStoreFloat2(triangle + 0, pt1);
+	DirectX::XMStoreFloat2(triangle + 1, pt2);
+	DirectX::XMStoreFloat2(triangle + 2, pt3);
+	const DirectX::XMFLOAT2* it{ triangle };
+	const DirectX::XMFLOAT2* const end{ triangle + 3 };
+	MoveToEx(
+		hDC,
+		static_cast<int>(it->x),
+		static_cast<int>(it->y),
+		nullptr
+	);
+	++it;
+	for (; it != end; ++it)
+	{
+		LineTo(
+			hDC,
+			static_cast<int>(it->x),
+			static_cast<int>(it->y)
+		);
+	}
+	it = triangle;
+	LineTo(
+		hDC,
+		static_cast<int>(it->x),
+		static_cast<int>(it->y)
+	);
+	EndPath(hDC);
+	StrokeAndFillPath(hDC);
+}
+
+void RenderManager::DrawTriangle(const DirectX::XMVECTOR(&points)[3])
+{
+	HDC hDC{ pRenderManager->hBackBufferDC };
+	BeginPath(hDC);
+	DirectX::XMFLOAT2 triangle[3]{};
+	for (int i = 0; i < 3; ++i)
+	{
+		DirectX::XMStoreFloat2(triangle + i, points[i]);
+	}
+	const DirectX::XMFLOAT2* it{ triangle };
+	const DirectX::XMFLOAT2* const end{ triangle + 3 };
+	MoveToEx(
+		hDC,
+		static_cast<int>(it->x),
+		static_cast<int>(it->y),
+		nullptr
+	);
+	++it;
+	for (; it != end; ++it)
+	{
+		LineTo(
+			hDC,
+			static_cast<int>(it->x),
+			static_cast<int>(it->y)
+		);
+	}
+	it = triangle;
+	LineTo(
+		hDC,
+		static_cast<int>(it->x),
+		static_cast<int>(it->y)
+	);
+	EndPath(hDC);
+	StrokeAndFillPath(hDC);
+}
+
 void RenderManager::Present()
 {
 	BitBlt(pRenderManager->hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT,

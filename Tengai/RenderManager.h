@@ -20,6 +20,8 @@ public:
 	static void DrawString(const WCHAR* _str, int _x, int _y, const WCHAR* _font, int _fontSize, COLORREF _color);
 	static void DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3], COLORREF color);
 	static void DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3]);
+	static void DrawTriangle(const DirectX::XMVECTOR pt1, const DirectX::XMVECTOR pt2, const DirectX::XMVECTOR pt3);
+	static void DrawTriangle(const DirectX::XMVECTOR(&points)[3]);
 	static void Present();
 	static void Clear();
 
