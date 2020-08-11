@@ -1,7 +1,7 @@
 #pragma once
 
 #define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_HEIGHT 960
 #define FPS 60
 #define PI 3.141592f
 template<typename EnumT>
@@ -21,6 +21,5 @@ enum class Direction
 	LEFT_DOWN,
 	RIGHT_UP,
 	RIGHT_DOWN,
-
 	END
 };

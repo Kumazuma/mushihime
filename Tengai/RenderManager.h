@@ -1,6 +1,6 @@
 #pragma once
 #include <Windows.h>
-
+#include <DirectXMath.h>
 class RenderManager
 {
 private:
@@ -18,6 +18,8 @@ public:
 	static void DrawCircle(const RECT& _rc, COLORREF _innerColor, COLORREF _outlineColor);
 	static void DrawString(const WCHAR* _str,int _x, int _y);
 	static void DrawString(const WCHAR* _str, int _x, int _y, const WCHAR* _font, int _fontSize, COLORREF _color);
+	static void DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3], COLORREF color);
+	static void DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3]);
 	static void Present();
 	static void Clear();
 

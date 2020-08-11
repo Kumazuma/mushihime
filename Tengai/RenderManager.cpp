@@ -113,6 +113,68 @@ void RenderManager::DrawString(const WCHAR* _str, int _x, int _y, const WCHAR* _
 	SetTextColor(pRenderManager->hBackBufferDC, oldColor);
 }
 
+void RenderManager::DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3], COLORREF color)
+{
+	//TODO: now not implementation color fill
+	HDC hDC{ pRenderManager->hBackBufferDC };
+	//BeginPath(hDC);
+	const DirectX::XMFLOAT2* it{ triangle };
+	const DirectX::XMFLOAT2* const end{ triangle + 3 };
+	MoveToEx(
+		hDC,
+		static_cast<int>(it->x),
+		static_cast<int>(it->y),
+		nullptr
+	);
+	++it;
+	for (; it != end; ++it)
+	{
+		LineTo(
+			hDC,
+			static_cast<int>(it->x),
+			static_cast<int>(it->y)
+		);
+	}
+	it = triangle;
+	LineTo(
+		hDC,
+		static_cast<int>(it->x),
+		static_cast<int>(it->y)
+	);
+}
+
+void RenderManager::DrawTriangle(const DirectX::XMFLOAT2(&triangle)[3])
+{
+	HDC hDC{ pRenderManager->hBackBufferDC };
+	//BeginPath(hDC);
+	const DirectX::XMFLOAT2* it{ triangle };
+	const DirectX::XMFLOAT2* const end{ triangle + 3 };
+	MoveToEx(
+		hDC,
+		static_cast<int>(it->x),
+		static_cast<int>(it->y),
+		nullptr
+	);
+	++it;
+	for (; it != end; ++it)
+	{
+		LineTo(
+			hDC,
+			static_cast<int>(it->x),
+			static_cast<int>(it->y)
+		);
+	}
+	it = triangle;
+	LineTo(
+		hDC,
+		static_cast<int>(it->x),
+		static_cast<int>(it->y)
+	);
+	//EndPath(hDC);
+	//HRGN region = PathToRegion(hDC);
+
+}
+
 void RenderManager::Present()
 {
 	BitBlt(pRenderManager->hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT,
