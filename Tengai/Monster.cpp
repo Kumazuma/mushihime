@@ -162,10 +162,7 @@ void Monster::Initialize(const MonsterType _monsterType, const DirectX::XMFLOAT2
 		fireStateList[2]->pNextState = fireStateList[3];
 		fireStateList[3]->pNextState = fireStateList[4];
 		fireStateList[4]->pNextState = fireStateList[1];
-		//별모양의 보스
-		m_P[0] = { 0.f, -20.f, 0.f };
-		m_P[1] = { -20.f, 20.f , 0.f };
-		m_P[2] = { 20.f, 20.f, 0.f };
+
 		DirectX::XMMATRIX matStar, Scale, RotZ, Trans, RevZ, Parent;
 		matStar = DirectX::XMMatrixIdentity();
 		Scale = DirectX::XMMatrixScaling(1.f, 1.f, 0.f);
@@ -174,9 +171,9 @@ void Monster::Initialize(const MonsterType _monsterType, const DirectX::XMFLOAT2
 		RevZ = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(0.f));
 		Parent = DirectX::XMMatrixTranslation(position.x, position.y, 0.f);
 		matStar = Scale * RotZ * Trans * RevZ * Parent;
-
-		for(int i = 0; i < 3; i++)
-			m_Q[i] = DirectX::XMVector3TransformCoord(m_P[i], matStar);
+		
+		auto s{ DirectX::XMVector3TransformCoord(DirectX::XMVectorSet(0.f, 0.f, 0.f, 0.f), Parent) };
+		DirectX::XMStoreFloat2(&position, s);
 
 		monsterRect = RECT{ -36, -36, 36, 36 };
 		colliders.push_back(RECT{ -32, -32, 32, 32 });
@@ -235,13 +232,30 @@ void Monster::Update()
 			}
 		}
 	}
+	if (monsterType == MonsterType::STAR)
+	{
+		position.x += 1;
+	}
 }
 
 void Monster::Render()
 {
 	if (monsterType == MonsterType::STAR)
 	{
-		RenderManager::DrawTriangle(m_Q);
+		DirectX::XMVECTOR triangle[3]{
+			{0.f, -20.f, 0.f },
+			{ -20.f, 20.f , 0.f },
+			{ 20.f, 20.f, 0.f }
+		};
+		auto scale{ DirectX::XMMatrixScaling(1.f, 1.f, 0.f) };
+		auto rot{ DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(0.f)) };
+		auto trans{ DirectX::XMMatrixTranslation(position.x, position.y, 0.f) };
+		auto transform = scale * rot * trans;
+		for (int i = 0; i < 3; ++i)
+		{
+			triangle[i] = DirectX::XMVector3TransformCoord(triangle[i], transform);
+		}
+		RenderManager::DrawTriangle(triangle);
 	}
 	else
 		RenderManager::DrawSimpleCollider(monsterRect + position, RGB(0, 200, 0));

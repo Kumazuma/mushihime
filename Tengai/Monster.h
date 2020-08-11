@@ -33,7 +33,13 @@ public:
 	CharacterState* currentMoveState;
 	std::vector<CharacterState*> moveStateList;
 	std::vector<CharacterState*> fireStateList;
-	DirectX::XMVECTOR m_P[3];
-	DirectX::XMVECTOR m_Q[3];
 };
+class BossPartStar
+{
+public:
 
+};
+class Boss : public Monster
+{
+	
+};
