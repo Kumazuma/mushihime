@@ -5,10 +5,10 @@ BackGround* pBackGround = nullptr;
 
 BackGround::BackGround()
 {
-	//position.x = 0;
-	//position.y = 0;
-	//area = { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT };
-	//color = RGB(128, 255, 255);
+	position.x = 0;
+	position.y = 0;
+	area = { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT };
+	color = RGB(128, 255, 255);
 
 	//
 	//for (int i = 0; i < 4; i++)
@@ -57,7 +57,7 @@ void BackGround::Update()
 
 void BackGround::Render()
 {
-	//RenderManager::DrawRect(area, color, color);
+	RenderManager::DrawRect(area, color, color);
 
 	//auto iter = clouds.begin();
 	//auto end = clouds.end();
