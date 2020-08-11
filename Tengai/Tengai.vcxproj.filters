@@ -232,9 +232,6 @@
     <ClCompile Include="TitleUI.cpp">
       <Filter>01.GameObject\2_UI\Title</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
