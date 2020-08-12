@@ -19,7 +19,7 @@ void TitleUI::Update()
 
 void TitleUI::Render()
 {
-	RenderManager::DrawString(L"TENGAI", position.x - 100, position.y, NULL, 50, RGB(255, 0, 0));
+	RenderManager::DrawString(L"MUSHIHIMESAMA", WINDOW_WIDTH * 0.5f , position.y, NULL, 50, RGB(255, 0, 0),TextAlign::Center);
 }
 
 PressAnyKeyUI::PressAnyKeyUI()
