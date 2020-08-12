@@ -4,6 +4,8 @@
 #define WINDOW_HEIGHT 960
 #define FPS 60
 #define PI 3.141592f
+#define DELTA_TIME 0.01f
+
 template<typename EnumT>
 constexpr int ENUM_MAX()
 {

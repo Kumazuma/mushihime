@@ -49,6 +49,8 @@ void Monster::Initialize(const MonsterType _monsterType, const DirectX::XMFLOAT2
 		);
 		fireStateList.push_back(
 			new WaitState{ 0.1f });
+	/*	fireStateList.push_back(
+			new CrossCurvesFireState{ this, 0.2f, 3.f });*/
 		fireStateList.push_back(
 			new FocusOnPlayerFireState{ this ,0.4f, 3.f });
 		fireStateList.push_back(

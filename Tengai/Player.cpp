@@ -106,6 +106,14 @@ void Player::Update()
 		pFireState = new ZigzagWarmFireState{ this, 0.2f, 2.f };
 	}
 
+	if (InputManager::GetKey('C'))
+	{
+		if(m_bIsInvicible == false)
+			m_bIsInvicible = true;
+		else
+			m_bIsInvicible = false;
+	}
+
 	UpdateSpecialMove();
 	pFireState->Update();
 	
@@ -117,10 +125,20 @@ void Player::Render()
 
 	RenderManager::DrawRect(rcInvalid + position, RGB(102, 255, 102));
 	RenderManager::DrawRect(simpleCollider + position, RGB(56, 68, 255));
+
+	if (m_bIsInvicible == true)
+	{
+		TCHAR str[10] = {};
+		wsprintf(str, TEXT("DEBUGMODE"));
+		RenderManager::DrawString(str, position.x - 50, position.y + 50);
+	}
 }
 
 void Player::OnCollision(const CollisionEvent& event)
 {
+	if (m_bIsInvicible == true)
+		return;
+
 	if (event.other->type == ObjectType::BULLET)
 	{
 		auto* pBullet = (Bullet*)event.other;

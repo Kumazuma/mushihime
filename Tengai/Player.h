@@ -26,6 +26,8 @@ private:
 	float interval = 0.1f;
 	int fireCount = 0;
 	bool specialMoveFlag = false;
+
+	bool m_bIsInvicible = false;
 	
 };
 

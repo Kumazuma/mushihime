@@ -97,6 +97,20 @@ public:
 	FlowerCurvesFireState(Character* pCharacter, float _interval, float _time = 9999.f);
 	bool Update() override;
 };
+//방사형으로 조금씩 도는 총알을 쏘는 함수
+class ReverseFlowerCurvesFireState : public FireState
+{
+public:
+	ReverseFlowerCurvesFireState(Character* pCharacter, float _interval, float _time = 9999.f);
+	bool Update() override;
+};
+
+class CrossCurvesFireState : public FireState
+{
+public:
+	CrossCurvesFireState(Character* pCharacter, float _interval, float _time = 9999.f);
+	bool Update() override;
+};
 
 class UniqueFlowerFireState : public FireState
 {

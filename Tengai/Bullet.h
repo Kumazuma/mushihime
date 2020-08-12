@@ -14,6 +14,7 @@ enum class BulletType
 	_08,
 	_09,
 	_10,
+	_11,
 
 	END
 };
@@ -127,4 +128,15 @@ public:
 private:
 	float m_fStackTime;
 	float m_fAlphaNum; 
+
+	float m_fScalingStackTime;
+	float m_fAddValue;
+};
+
+class Bullet011 : public Bullet
+{
+public:
+	Bullet011();
+	virtual void Update() override;
+	virtual void Render() override;
 };

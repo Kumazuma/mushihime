@@ -41,13 +41,13 @@ void StarPart::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& fir
 
 	//스타 움직임 부분
 	moveStateList.push_back(
-		new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{0.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-200.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + DirectX::XMFLOAT2{-400.f,  0.f} }
+		new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{0.f, 0.f} ,firstPos + DirectX::XMFLOAT2{ -1.f * WINDOW_WIDTH / 4, 700.f } ,firstPos + DirectX::XMFLOAT2{ 0.f,  400.f} }
 	);
 	moveStateList.push_back(
-		new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{-400.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-150.f, 1.f * WINDOW_HEIGHT / 4 } ,firstPos + DirectX::XMFLOAT2{-100.f,  0.f} }
+		new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{0.f, 400.f} ,firstPos + DirectX::XMFLOAT2{ 1.f * WINDOW_WIDTH / 4 , 150.f } ,firstPos + DirectX::XMFLOAT2{ 0.f,  100.f} }
 	);
 	moveStateList.push_back(
-		new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{-100.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-150.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + DirectX::XMFLOAT2{-400.f,  0.f} }
+		new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{ 0.f, 100.f} ,firstPos + DirectX::XMFLOAT2{ 1.f * WINDOW_WIDTH / 4,  150.f} ,firstPos + DirectX::XMFLOAT2{ 0.f,  400.f} }
 	);
 	speed = 50;
 	moveStateList[0]->pNextState = moveStateList[1];
@@ -133,6 +133,7 @@ void StarPart::Render()
 			{ -20.f, 20.f , 0.f },
 			{ 20.f, 20.f, 0.f }
 	};
+
 	auto scale{ DirectX::XMMatrixScaling(1.f, 1.f, 0.f) };
 	auto rot{ DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(0.f)) };
 	auto trans{ DirectX::XMMatrixTranslation(0.f, -50.f, 0.f) };
