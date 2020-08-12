@@ -121,10 +121,12 @@ class Bullet010 : public Bullet
 {
 public:
 	Bullet010();
+	void Initialize(const DirectX::XMFLOAT2& pos, float radAngle);
 	virtual void Update() override;
 	virtual void Render() override;
 
 private:
+	DirectX::XMMATRIX m_info;
 	float m_fStackTime;
 	float m_fAlphaNum; 
 };

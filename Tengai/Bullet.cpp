@@ -109,6 +109,7 @@ void MetaBullet::Initialize(GameObject* _pObject, BulletType _type, const Direct
 	case BulletType::_10:
 		pBullet->~Bullet();
 		new(pBullet) Bullet010{};
+		static_cast<Bullet010*>(pBullet)->Initialize(pos, rad);
 		break;
 		
 	}
@@ -361,6 +362,12 @@ Bullet010::Bullet010()
 	m_fStackTime = 0.f;
 }
 
+void Bullet010::Initialize(const DirectX::XMFLOAT2& pos, float radAngle)
+{
+	//정보 초기화
+	m_info = DirectX::XMMatrixRotationZ(radAngle) * DirectX::XMMatrixTranslation(pos.x, pos.y, 0.f);
+}
+
 void Bullet010::Update()
 {
 	m_fStackTime += TimeManager::GetInstance()->DeltaTime();
@@ -376,18 +383,30 @@ void Bullet010::Update()
 		Character const* const pPlayer = (Character*)ObjectManager::GetInstance()->pPlayer;
 		if (pPlayer == nullptr)
 			return;
-
+		//이렇게 하면 행렬에서 현재 총알의 XY좌표를 알 수 있다.
+		DirectX::XMVECTOR bulletPos{};
+		DirectX::XMVECTOR bulletXAxis{ DirectX::XMVector3Transform(DirectX::XMVectorSet(1.f, 0.f, 0.f, 0.f), m_info) };
+		DirectX::XMVECTOR bulletYAxis{ DirectX::XMVector3Transform(DirectX::XMVectorSet(0.f, 1.f, 0.f, 0.f), m_info) };
+		DirectX::XMVECTOR playerPos{ DirectX::XMLoadFloat2(&pPlayer->position) };
+		bulletPos = DirectX::XMVector3TransformCoord(bulletPos, m_info);
+		
 		DirectX::XMVECTOR dpos =
-			DirectX::XMVector3Normalize(DirectX::XMLoadFloat2(&pPlayer->position) - DirectX::XMLoadFloat2(&this->position));
+			DirectX::XMVector3Normalize(playerPos - bulletPos);
 		DirectX::XMVECTOR forward{ DirectX::XMVectorSet(1.f,0.f,0.f,0.f) };
-		auto tmp{ DirectX::XMVector3Dot(dpos, forward) };
+		auto tmp{ DirectX::XMVector3Dot(dpos, bulletXAxis) };
 		float cosV = DirectX::XMVectorGetZ(tmp);
 		float radian = acosf(cosV);
-		if (pPlayer->position.y < this->position.y)
+		if (DirectX::XMConvertToRadians(90.f) >= radian)
+		{
+			radian = DirectX::XMConvertToRadians(90.f);
+		}
+		if (DirectX::XMVectorGetY(DirectX::XMVector3Dot(playerPos, bulletYAxis)) < 0.f  )
 			radian *= -1.f;
-
+		m_info = DirectX::XMMatrixRotationZ(radian) * m_info;
+		m_info = DirectX::XMMatrixTranslation(speed, 0.f, 0.f) * m_info;
+		bulletPos = DirectX::XMVector3TransformCoord(bulletPos, m_info);
+		DirectX::XMStoreFloat2(&position, bulletPos);
 		this->radian = radian;
-
 		Move();
 		Bullet::Update();
 	}
