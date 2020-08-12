@@ -8,6 +8,7 @@ enum class MonsterType
 	MOB01,
 	MOB02,
 	BOSS,
+	STAR,
 	END
 };
 
@@ -33,4 +34,12 @@ public:
 	std::vector<CharacterState*> moveStateList;
 	std::vector<CharacterState*> fireStateList;
 };
+class BossPartStar
+{
+public:
 
+};
+class Boss : public Monster
+{
+	
+};
