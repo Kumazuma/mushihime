@@ -141,8 +141,9 @@ void RenderManager::DrawString(const WCHAR* _str, int _x, int _y, const WCHAR* _
 	HFONT hFont{ pRenderManager->GetFont(_font, _fontSize) };
 	HFONT oldFont = (HFONT)SelectObject(pRenderManager->hBackBufferDC, hFont);
 	COLORREF oldColor = SetTextColor(pRenderManager->hBackBufferDC, _color);
+	const size_t textLen{ wcslen(_str) };
 	SIZE size{};
-	GetTextExtentPointW(pRenderManager->hBackBufferDC, _str, -1, &size);
+	GetTextExtentPointW(pRenderManager->hBackBufferDC, _str, textLen , &size);
 	int divVal{ 0 };
 	switch (_textAlign)
 	{
@@ -155,7 +156,7 @@ void RenderManager::DrawString(const WCHAR* _str, int _x, int _y, const WCHAR* _
 	}
 	_x += static_cast<int>(size.cx * divVal / 2.f);
 	//DrawTextExW(RenderManager->hBackBufferDC, _str, 0, wcslen(_str), )
-	TextOutW(pRenderManager->hBackBufferDC, _x, _y, _str, wcslen(_str));
+	TextOutW(pRenderManager->hBackBufferDC, _x, _y, _str, textLen);
 	SelectObject(pRenderManager->hBackBufferDC, oldFont);
 	SetTextColor(pRenderManager->hBackBufferDC, oldColor);
 }
