@@ -49,26 +49,10 @@ void StarPart::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& fir
 	moveStateList.push_back(
 		new BezierCurveMoveToState{ this, firstPos + DirectX::XMFLOAT2{-100.f, 0.f} ,firstPos + DirectX::XMFLOAT2{-150.f, -1.f * WINDOW_HEIGHT / 4 } ,firstPos + DirectX::XMFLOAT2{-400.f,  0.f} }
 	);
-	fireStateList.push_back(
-		new WaitState{ 0.1f });
-	fireStateList.push_back(
-		new FlowerFireState{ this ,2.f, 6.f });
-	fireStateList.push_back(
-		new FocusOnPlayerFireState{ this, 0.4f, 3.f });
-	fireStateList.push_back(
-		new FlowerCurvesFireState{ this, 0.2f, 3.f });
-	fireStateList.push_back(
-		new FocusOnPlayerFireState{ this, 0.4f, 3.f });
 	speed = 50;
 	moveStateList[0]->pNextState = moveStateList[1];
 	moveStateList[1]->pNextState = moveStateList[2];
 	moveStateList[2]->pNextState = moveStateList[1];
-
-	fireStateList[0]->pNextState = fireStateList[1];
-	fireStateList[1]->pNextState = fireStateList[2];
-	fireStateList[2]->pNextState = fireStateList[3];
-	fireStateList[3]->pNextState = fireStateList[4];
-	fireStateList[4]->pNextState = fireStateList[1];
 
 	DirectX::XMMATRIX matStar, Scale, RotZ, Trans, RevZ, Parent;
 	matStar = DirectX::XMMatrixIdentity();
@@ -89,9 +73,7 @@ void StarPart::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& fir
 	monsterType = _monsterType;
 	simpleCollider = CreateSimpleCollider(colliders);
 	currentMoveState = this->moveStateList.front();
-	currentFireState = this->fireStateList.front();
 	currentMoveState->Reset();
-	currentFireState->Reset();
 }
 
 StarPart::~StarPart()
@@ -138,11 +120,8 @@ void StarPart::Update()
 			}
 		}
 	}
-	if (monsterType == MonsterType::STAR)
-	{
 		//position.x += 1;
-		m_Degree += 5.f;
-	}
+		m_Degree += 1.f;
 	
 }
 
@@ -154,9 +133,11 @@ void StarPart::Render()
 			{ 20.f, 20.f, 0.f }
 	};
 	auto scale{ DirectX::XMMatrixScaling(1.f, 1.f, 0.f) };
-	auto rot{ DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(m_BasicDegree + m_Degree)) };
-	auto trans{ DirectX::XMMatrixTranslation(position.x, position.y, 0.f) };
-	auto transform = scale * rot * trans;
+	auto rot{ DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(0.f)) };
+	auto trans{ DirectX::XMMatrixTranslation(0.f, -50.f, 0.f) };
+	auto RevZ{ DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(m_BasicDegree + m_Degree)) };
+	auto Parent = DirectX::XMMatrixTranslation(position.x, position.y, 0.f);
+	auto transform = scale * rot * trans * RevZ * Parent;
 	for (int i = 0; i < 3; ++i)
 	{
 		triangle[i] = DirectX::XMVector3TransformCoord(triangle[i], transform);
