@@ -102,6 +102,14 @@ void MetaBullet::Initialize(GameObject* _pObject, BulletType _type, const Direct
 		pBullet->~Bullet();
 		new(pBullet) Bullet08{};
 		break;
+	case BulletType::_09:
+		pBullet->~Bullet();
+		new(pBullet) Bullet09{};
+		break;
+	case BulletType::_10:
+		pBullet->~Bullet();
+		new(pBullet) Bullet010{};
+		break;
 		
 	}
 	pBullet->uid = uid;
@@ -211,7 +219,7 @@ void Bullet06::Update()
 	DirectX::XMFLOAT2 direction{};
 	
 	radian2 += PI * 1.f * 15.f / 180;
-	direction.x += cosf(radian) +cosf(radian2);
+	direction.x += cosf(radian) + cosf(radian2);
 	direction.y += sinf(radian) + sinf(radian2);
 	position.x += direction.x * speed * TimeManager::DeltaTime();
 	position.y += direction.y * speed * TimeManager::DeltaTime();
@@ -257,7 +265,10 @@ void Bullet07::Update()
 
 void Bullet07::Render()
 {
-	RenderManager::DrawCircle(RECT{ -4, -4, 4, 4 } + position, RGB(255, 130, 0), RGB(255, 0, 0));
+	if (m_fStackTime > 1.5f)
+		RenderManager::DrawCircle(RECT{ -6, -6, 6, 6 } + position, RGB(255, 0, 0), RGB(255, 0, 0));
+	else
+		RenderManager::DrawCircle(RECT{ -4, -4, 4, 4 } + position, RGB(255, 130, 0), RGB(255, 0, 0));
 }
 
 Bullet08::Bullet08()
@@ -266,6 +277,7 @@ Bullet08::Bullet08()
 	speed = 200;
 	colliders.push_back(RECT{ -3,-3,3, 3 });
 	m_fStackTime = 0.f;
+	m_iCheckNum = 0;
 }
 
 void Bullet08::Update()
@@ -274,10 +286,13 @@ void Bullet08::Update()
 
 	if (m_fStackTime > 1.5f)
 	{
+		radian += PI * 0.5f / 180;
 		Move();
 	}
 	else
 	{
+		m_iCheckNum++;
+		// ver 1
 		radian += PI * 1.f * 15.f / 180;
 		position.x += 3.f * sinf(radian);
 		position.y -= speed * TimeManager::DeltaTime();
@@ -289,4 +304,135 @@ void Bullet08::Update()
 void Bullet08::Render()
 {
 	RenderManager::DrawCircle(RECT{ -4, -4, 4, 4 } + position, RGB(255, 130, 0), RGB(255, 0, 0));
+}
+
+Bullet09::Bullet09()
+{
+	hp = 999;
+	speed = 200;
+	colliders.push_back(RECT{ -3,-3,3, 3 });
+	m_fStackTime = 0.f;
+	m_iCheckNum = 0;
+}
+
+void Bullet09::Update()
+{
+	m_fStackTime += TimeManager::GetInstance()->DeltaTime();
+
+	if (m_fStackTime > 1.5f)
+	{
+		radian += PI * 0.5f / 180;
+		Move();
+	}
+	else
+	{
+		m_iCheckNum++;
+		if (m_iCheckNum % 2 == 0)
+		{
+			radian += PI * 1.f * 15.f / 180;
+			position.x -= speed * TimeManager::DeltaTime() * 2.5f;
+			position.y -= speed * TimeManager::DeltaTime() * 2.5f;
+		}
+		else
+		{
+			radian += PI * 1.f * 15.f / 180;
+			position.x += speed * TimeManager::DeltaTime() * 2.5f;
+			position.y -= speed * TimeManager::DeltaTime() * 2.5f;
+		}
+	}
+
+	Bullet::Update();
+}
+
+void Bullet09::Render()
+{
+	if (m_fStackTime > 1.5f)
+		RenderManager::DrawCircle(RECT{ -8, -8, 8, 8 } + position, RGB(255, 130, 0), RGB(255, 0, 0));
+	else
+		RenderManager::DrawCircle(RECT{ -4, -4, 4, 4 } + position, RGB(255, 130, 0), RGB(255, 0, 0));
+}
+
+Bullet010::Bullet010()
+{
+	hp = 999;
+	speed = 150;
+	colliders.push_back(RECT{ -3,-3,3, 3 });
+	m_fAlphaNum = 0.f;
+	m_fStackTime = 0.f;
+}
+
+void Bullet010::Update()
+{
+	m_fStackTime += TimeManager::GetInstance()->DeltaTime();
+
+	if (m_fStackTime > 4.5f)
+	{
+		if (m_fStackTime > 6.f)
+			ObjectManager::DeleteObject(this);
+		Move();
+	}
+	else
+	{
+		Character const* const pPlayer = (Character*)ObjectManager::GetInstance()->pPlayer;
+		if (pPlayer == nullptr)
+			return;
+
+		DirectX::XMVECTOR dpos =
+			DirectX::XMVector3Normalize(DirectX::XMLoadFloat2(&pPlayer->position) - DirectX::XMLoadFloat2(&this->position));
+		DirectX::XMVECTOR forward{ DirectX::XMVectorSet(1.f,0.f,0.f,0.f) };
+		auto tmp{ DirectX::XMVector3Dot(dpos, forward) };
+		float cosV = DirectX::XMVectorGetZ(tmp);
+		float radian = acosf(cosV);
+		if (pPlayer->position.y < this->position.y)
+			radian *= -1.f;
+
+		this->radian = radian;
+
+		Move();
+		Bullet::Update();
+	}
+
+}
+
+void Bullet010::Render()
+{
+	Character const* const pPlayer = (Character*)ObjectManager::GetInstance()->pPlayer;
+	if (pPlayer == nullptr)
+		return;
+
+	DirectX::XMFLOAT2 fVertexArray[3] = 
+	{
+		{0.f ,  10.f},
+		{15.f,  0.f },
+		{0.f, -10.f }
+	};
+
+	DirectX::XMVECTOR vecVertexArray[3];
+	for (int i = 0; i < 3; i++)
+		vecVertexArray[i] = DirectX::XMLoadFloat2(&fVertexArray[i]);
+
+	DirectX::XMMATRIX matWorld, matRot, matParent;
+
+	matRot = DirectX::XMMatrixRotationZ(radian);
+	matParent = DirectX::XMMatrixTranslation(position.x, position.y, 0.f);
+	matWorld = matRot * matParent;
+
+	for (int i = 0; i < 3; i++)
+		vecVertexArray[i] = DirectX::XMVector2TransformCoord(vecVertexArray[i], matWorld);
+
+
+	DirectX::XMFLOAT2 fResultArray[3];
+	for (int i = 0; i < 3; i++)
+		DirectX::XMStoreFloat2(&fResultArray[i], vecVertexArray[i]);
+
+	if (m_fStackTime > 4.5f)
+	{
+		m_fAlphaNum += 10.f;
+		RenderManager::DrawTriangle(fResultArray, RGB(255, m_fAlphaNum, m_fAlphaNum));
+	}
+	else
+	{
+		RenderManager::DrawTriangle(fResultArray, RGB(255, 0, 0));
+	}
+
 }

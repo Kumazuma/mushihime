@@ -13,4 +13,6 @@ public:
 	void OnShow(const Event&);
 	void OnCollision(const CollisionEvent& event);
 	//variable
+private:
+	std::vector<GameObject*> m_vecParts;
 };

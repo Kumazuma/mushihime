@@ -95,6 +95,16 @@ void Player::Update()
 
 		pFireState = new UniqueWarmFireState{ this, 0.2f, 2.f };
 	}
+	if (InputManager::GetKey('H'))
+	{
+		if (pFireState)
+		{
+			delete pFireState;
+			pFireState = nullptr;
+		}
+
+		pFireState = new ZigzagWarmFireState{ this, 0.2f, 2.f };
+	}
 
 	UpdateSpecialMove();
 	pFireState->Update();
@@ -105,7 +115,7 @@ void Player::Render()
 {
 	RECT rcInvalid = { -40, -40 , 40, 40 };
 
-	RenderManager::DrawRect(rcInvalid + position);
+	RenderManager::DrawRect(rcInvalid + position, RGB(102, 255, 102));
 	RenderManager::DrawRect(simpleCollider + position, RGB(56, 68, 255));
 }
 

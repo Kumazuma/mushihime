@@ -76,6 +76,13 @@ public:
 	FocusOnPlayerFireState(Character* pCharacter, float _interval, float _time = 9999.f);
 	bool Update() override;
 };
+//일정 시간동안 플레이어를 쫓아가는 유도탄을 발사하는 비헤이비어
+class GuidedBulletFireState : public FireState
+{
+public:
+	GuidedBulletFireState(Character* pCharacter, float _interval, float _time = 9999.f);
+	bool Update() override;
+};
 //방사형으로 쏘는 함수
 class FlowerFireState : public FireState
 {
@@ -102,6 +109,13 @@ class UniqueWarmFireState : public FireState
 {
 public:
 	UniqueWarmFireState(Character* pCharacter, float _interval, float _time = 9999.f);
+	bool Update() override;
+};
+
+class ZigzagWarmFireState : public FireState
+{
+public:
+	ZigzagWarmFireState(Character* pCharacter, float _interval, float _time = 9999.f);
 	bool Update() override;
 };
 

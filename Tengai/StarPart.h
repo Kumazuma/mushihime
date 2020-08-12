@@ -15,11 +15,5 @@ public:
 private:
 	float m_BasicDegree = 0.f;
 	float m_Degree = 0.f;
-	DirectX::XMMATRIX m_Parent;
-	MonsterType monsterType;
-	CharacterState* currentFireState;
-	CharacterState* currentMoveState;
-	std::vector<CharacterState*> moveStateList;
-	std::vector<CharacterState*> fireStateList;
 };
 
