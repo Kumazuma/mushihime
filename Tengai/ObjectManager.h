@@ -14,13 +14,13 @@ class ObjectManager
 private:
 	ObjectManager();
 	~ObjectManager();
-	static void AddObject(ObjectType _type, GameObject*);
+	static void AddObject(ObjectType _type, std::shared_ptr<GameObject>);
 public:
 	static ObjectManager* GetInstance();
 	template<typename ObjT, typename ...Arg>
-	static GameObject* CreateObject(ObjectType _type, Arg&& ...args);
-	static GameObject* CreateObject(ObjectType _type);
-	static bool DeleteObject(GameObject* _target);
+	static std::shared_ptr<GameObject> CreateObject(ObjectType _type, Arg&& ...args);
+	static std::shared_ptr<GameObject> CreateObject(ObjectType _type);
+	static bool DeleteObject(const std::shared_ptr<GameObject>& _target);
 	static void DestroyAll();
 	static void DestroyAll(ObjectType _type);
 
@@ -32,18 +32,18 @@ public:
 	static void RenderBulletCount();
 	static void RenderHP();
 	
-	Player* pPlayer = nullptr;
+	std::weak_ptr<GameObject> pPlayer;
 	PauseBox* pPauseUI = nullptr;
 	BackGround* pBG = nullptr;
 
-	list<GameObject*>objectTable[ENUM_MAX<ObjectType>()];
-	list<GameObject*>objectList;
+	list<std::shared_ptr<GameObject> >objectTable[ENUM_MAX<ObjectType>()];
+	list<std::shared_ptr<GameObject> >objectList;
 };
 
 template<typename ObjT, typename ...Arg>
-inline GameObject* ObjectManager::CreateObject(ObjectType _type, Arg&& ...args)
+inline std::shared_ptr<GameObject> ObjectManager::CreateObject(ObjectType _type, Arg&& ...args)
 {
-	GameObject* obj = new ObjT{ std::forward<Arg>(args)... };
+	std::shared_ptr<GameObject> obj{ new ObjT{ std::forward<Arg>(args)... } };
 	AddObject(_type, obj);
 	return obj;
 }

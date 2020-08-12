@@ -75,7 +75,7 @@ void PlayScene::Update()
             if (prevTime <= iter->first && iter->first <= currentTime)
             {
                 oldTime = time;
-                EventManager::Broadcast< TimePassedEvent>(iter->second, currentTime);
+                EventManager::Broadcast< TimePassedEvent>(iter->second.lock(), currentTime);
             }
             else
             {
@@ -92,7 +92,7 @@ void PlayScene::Update()
         if (MainGame::GetInstance()->isPause == false)
         {
             MainGame::Pause();
-            auto box = (UI*)ObjectManager::CreateObject<PauseBox>(ObjectType::UI);
+            auto box = std::static_pointer_cast<UI>(ObjectManager::CreateObject<PauseBox>(ObjectType::UI));
             if (ShowBox(box))
             {
                 box->Show();
@@ -102,14 +102,14 @@ void PlayScene::Update()
                 box->Die();
             }
         }
-        else if(dynamic_cast<PauseBox*>(pCurrentShowBox) != nullptr)
+        else if(std::dynamic_pointer_cast<PauseBox>(pCurrentShowBox) != nullptr)
         {
             HideBox();
         }
     }
 }
 
-bool PlayScene::ShowBox(UI* ptr)
+bool PlayScene::ShowBox(std::shared_ptr<UI>& ptr)
 {
     if (pCurrentShowBox == nullptr)
     {

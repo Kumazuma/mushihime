@@ -5,7 +5,7 @@ class Star :
 {
 public:
 	Star();
-	static GameObject* Initialize(GameObject* const self, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos);
+	static std::shared_ptr<GameObject> Initialize(const std::shared_ptr<GameObject>& self, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos);
 	void Initialize(MonsterType monsterType, const DirectX::XMFLOAT2& firstPos);
 	~Star();
 	void Update() override;
@@ -14,5 +14,5 @@ public:
 	void OnCollision(const CollisionEvent& event);
 	//variable
 private:
-	std::vector<GameObject*> m_vecParts;
+	std::vector<std::shared_ptr<GameObject> > m_vecParts;
 };

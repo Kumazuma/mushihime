@@ -9,7 +9,7 @@ public:
 	virtual void Update() override;
 	virtual void Render() override;
 
-	bool Collision(const GameObject* _target);
+	bool Collision(const std::shared_ptr<GameObject>& _target);
 
 public:
 	float speed = 0.f;

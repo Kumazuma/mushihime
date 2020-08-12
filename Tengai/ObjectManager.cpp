@@ -22,19 +22,14 @@ ObjectManager::ObjectManager()
 ObjectManager::~ObjectManager()
 {
 	BackGround::Release();
-	for (auto it : pObjectManager->objectList)
-	{
-		delete it;
-		
-	}
 	pObjectManager->objectList.clear();
 }
 
-void ObjectManager::AddObject(ObjectType _type, GameObject* pObj)
+void ObjectManager::AddObject(ObjectType _type, std::shared_ptr<GameObject> pObj)
 {
 	pObj->uid = ++lastUid;
 	pObjectManager->objectTable[(int)_type].push_back(pObj);
-	pObjectManager->objectList.push_back(pObj);
+	pObjectManager->objectList.push_back(std::move(pObj));
 }
 
 ObjectManager * ObjectManager::GetInstance()
@@ -46,38 +41,39 @@ ObjectManager * ObjectManager::GetInstance()
 	return pObjectManager;
 }
 
-GameObject * ObjectManager::CreateObject(ObjectType _type)
+std::shared_ptr<GameObject> ObjectManager::CreateObject(ObjectType _type)
 {
-	GameObject* pObj = nullptr;
+	std::shared_ptr<GameObject> pObj = nullptr;
 	switch (_type)
 	{
 	case ObjectType::MONSTER:
-		pObj = new Monster();
+		pObj.reset(new Monster{});
 		break;
 	case ObjectType::PLAYER:
 	{
-		if (pObjectManager->pPlayer != nullptr)
+		auto tmp{ pObjectManager->pPlayer.lock() };
+		if (tmp != nullptr)
 		{
-			return pObjectManager->pPlayer;
+			return tmp;
 		}
-		pObjectManager->pPlayer = new Player();
-		pObj = pObjectManager->pPlayer;
+		pObj.reset(new Player{});
+		pObjectManager->pPlayer = pObj;
 		break;
 	}
 	case ObjectType::BULLET:
-		pObj = new Bullet{};
+		pObj.reset(new Bullet{});
 		break;
 	case ObjectType::ITEM:
-		pObj = new Item{};
+		pObj.reset(new Item{});
 		break;
 	case ObjectType::UI:
-		pObj = new UI();
+		pObj.reset(new UI());
 		break;
 	case ObjectType::TITLE_UI:
-		pObj = new TitleUI;
+		pObj.reset(new TitleUI{});
 		break;
 	case ObjectType::PRESSKEY_UI:
-		pObj = new PressAnyKeyUI();
+		pObj.reset(new PressAnyKeyUI{});
 		break;
 	default:
 		return nullptr;
@@ -87,11 +83,10 @@ GameObject * ObjectManager::CreateObject(ObjectType _type)
 	pObj->uid = ++lastUid;
 	pObjectManager->objectTable[(int)_type].push_back(pObj);
 	pObjectManager->objectList.push_back(pObj);
-
 	return pObj;
 }
 
-bool ObjectManager::DeleteObject(GameObject * _target)
+bool ObjectManager::DeleteObject(const std::shared_ptr<GameObject>& _target)
 {
 	auto& objList = pObjectManager->objectTable[(int)_target->type];
 	
@@ -150,7 +145,7 @@ void ObjectManager::LateUpdate()
 {
 	auto& objTable = pObjectManager->objectTable;
 	auto& goList = pObjectManager->objectList;
-	GameObject* target = nullptr;
+	std::shared_ptr<GameObject> target = nullptr;
 	for (auto& objList : objTable)
 	{
 		auto iter = objList.begin();
@@ -160,14 +155,10 @@ void ObjectManager::LateUpdate()
 			target = *iter;
 			if (target->isDead)
 			{
-				if (target == pObjectManager->pPlayer)
-				{
-					pObjectManager->pPlayer = nullptr;
-				}
+				
 				auto findResult = find(goList.begin(), goList.end(), (*iter));
 				goList.erase(findResult);
 				iter = objList.erase(iter);
-				delete target;
 			}
 			else
 			{
@@ -182,7 +173,7 @@ void ObjectManager::LateUpdate()
 	auto cend = pObjectManager->objectList.end();
 	for (; citer != cend; ++citer)
 	{
-		Character* target = dynamic_cast<Character*>(*citer);
+		std::shared_ptr<Character> target = std::dynamic_pointer_cast<Character>(*citer);
 		if (target == nullptr)
 		{
 			continue;
@@ -239,8 +230,11 @@ void ObjectManager::RenderBulletCount()
 
 void ObjectManager::RenderHP()
 {
-	if (pObjectManager->pPlayer == nullptr) return;
+	auto tmp{ pObjectManager->pPlayer.lock() };
+	if (tmp == nullptr) return;
+	
+	std::shared_ptr<Player> player{ std::static_pointer_cast<Player>(tmp) };
 	WCHAR wText[64] = {};
-	wsprintf(wText, L"HP : %d", pObjectManager->pPlayer->hp);
+	wsprintf(wText, L"HP : %d", player->hp);
 	RenderManager::DrawString(wText, 130, 0);
 }

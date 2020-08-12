@@ -13,7 +13,7 @@ void EventManager::Broadcast(Event* _pEvent, ObjectType _type, int _uid)
 	pEventManager->eventQueue.push_back({ _pEvent, _uid , _type });
 	pEventManager->events.push_back(_pEvent);
 }
-void EventManager::Broadcast(GameObject* const obj, Event* _pEvent)
+void EventManager::Broadcast(const std::shared_ptr<GameObject>& obj, Event* _pEvent)
 {
 	obj->eventQueue.push_back(_pEvent);
 	pEventManager->events.push_back(_pEvent);

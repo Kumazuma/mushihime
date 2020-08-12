@@ -10,11 +10,11 @@ public:
     void OnLoaded() override;
     void OnUnloaded() override;
     void Update() override;
-    virtual bool ShowBox(UI*) override;
+    virtual bool ShowBox(std::shared_ptr<UI>&) override;
     virtual bool HideBox() override;
-    std::vector<std::pair<float, GameObject*> > timeline;
-    std::vector<std::pair<float, GameObject*> >::const_iterator iter;
-    UI* pCurrentShowBox = nullptr;
+    std::vector<std::pair<float,std::weak_ptr<GameObject> > > timeline;
+    std::vector<std::pair<float,std::weak_ptr<GameObject> > >::const_iterator iter;
+    std::shared_ptr<UI> pCurrentShowBox = nullptr;
     float time;
     float oldTime;
 };

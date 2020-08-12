@@ -10,11 +10,11 @@ Monster::Monster()
 	currentMoveState = nullptr;
 }
 //우선 클리어
-GameObject* Monster::Initialize(GameObject* const obj, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos)
+std::shared_ptr<GameObject> Monster:: Initialize(const std::shared_ptr<GameObject>& obj, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos)
 {
 	if (obj->type == ObjectType::MONSTER)
 	{
-		Monster* self = static_cast<Monster*>(obj);
+		std::shared_ptr<Monster> self = std::static_pointer_cast<Monster>(obj);
 		self->Initialize(monsterType, firstPos);
 	}
 	return obj;
@@ -270,7 +270,7 @@ void Monster::OnCollision(const CollisionEvent& event)
 {
 	if (event.other->type == ObjectType::BULLET && this->isEnable)
 	{
-		const Bullet* const pBullet = (const Bullet*) event.other;
+		auto pBullet = std::static_pointer_cast<Bullet>(event.other);
 		hp -= pBullet->isAlias;
 		if (hp <= 0)
 		{
@@ -278,7 +278,7 @@ void Monster::OnCollision(const CollisionEvent& event)
 			if (monsterType == MonsterType::BOSS)
 			{
 				GameObject::Die();
-				UI* ui = (UI*)ObjectManager::CreateObject<GameWinBox>(ObjectType::UI);
+				std::shared_ptr<UI> ui = std::static_pointer_cast<UI>(ObjectManager::CreateObject<GameWinBox>(ObjectType::UI));
 				if (SceneManager::GetInstance()->pCurrentScene->ShowBox(ui) == false)
 				{
 					SceneManager::GetInstance()->pCurrentScene->HideBox();

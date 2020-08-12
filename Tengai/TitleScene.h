@@ -10,7 +10,7 @@ public:
 	virtual void OnUnloaded() override;
 	virtual void Update() override;
 
-	GameObject* titleUI = nullptr;
-	GameObject* pressUI = nullptr;
+	std::shared_ptr<GameObject> titleUI = nullptr;
+	std::shared_ptr<GameObject> pressUI = nullptr;
 };
 

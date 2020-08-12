@@ -40,11 +40,11 @@ public:
 class CollisionEvent : public Event
 {
 public:
-	CollisionEvent(const GameObject* _other) :
+	CollisionEvent(const std::shared_ptr<GameObject>& _other) :
 		Event{ EventId::COLLISION_OBJ },
 		other{ _other }
 	{
 
 	}
-	const GameObject* other;
+	std::shared_ptr<GameObject> other;
 };

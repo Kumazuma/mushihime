@@ -10,9 +10,10 @@ void Character::Render()
 {
 }
 
-bool Character::Collision(const GameObject* _target)
+bool Character::Collision(const std::shared_ptr<GameObject>& _target)
 {
-	const Character* target = dynamic_cast<const Character*>(_target);
+	
+	auto target{ std::dynamic_pointer_cast<const Character>(_target) };
 	if (target == nullptr) return false;
 	if (target->type == type) return false;
 

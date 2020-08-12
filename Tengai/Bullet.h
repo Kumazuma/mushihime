@@ -20,7 +20,7 @@ enum class BulletType
 class MetaBullet
 {
 public:
-	static void Initialize(GameObject* _pObject, BulletType _type, const DirectX::XMFLOAT2 & pos, float rad, bool _isAlias);
+	static void Initialize(std::shared_ptr<GameObject>& _pObject, BulletType _type, const DirectX::XMFLOAT2 & pos, float rad, bool _isAlias);
 };
 class Bullet : public Character
 {
@@ -126,7 +126,6 @@ public:
 	virtual void Render() override;
 
 private:
-	DirectX::XMMATRIX m_info;
 	float m_fStackTime;
 	float m_fAlphaNum; 
 };

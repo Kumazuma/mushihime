@@ -18,7 +18,7 @@ class Monster :
 	//method
 public:
 	Monster();
-	static GameObject* Initialize(GameObject* const self, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos);
+	static std::shared_ptr<GameObject> Initialize(const std::shared_ptr<GameObject>& self, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos);
 	void Initialize(MonsterType monsterType, const DirectX::XMFLOAT2& firstPos);
 	~Monster();
 	void Update() override;

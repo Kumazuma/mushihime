@@ -22,7 +22,7 @@ Item::Item(ItemType _type, const DirectX::XMFLOAT2& pos):
     Bind(EventId::COLLISION_OBJ, &Item::OnCollision);
 }
 
-GameObject* Item::Initialize(GameObject* const obj, ItemType _type, const DirectX::XMFLOAT2& pos)
+std::shared_ptr<GameObject> Item::Initialize(const std::shared_ptr<GameObject>& obj, ItemType _type, const DirectX::XMFLOAT2& pos)
 {
     if (obj->type == ObjectType::ITEM)
     {
@@ -31,10 +31,10 @@ GameObject* Item::Initialize(GameObject* const obj, ItemType _type, const Direct
         switch (_type)
         {
         case ItemType::HEAL:
-            new(obj) HealItem{ _type, pos };
+            new(obj.get()) HealItem{ _type, pos };
             break;
         case ItemType::SKILL:
-            new(obj) SkillItem{ _type, pos };
+            new(obj.get()) SkillItem{ _type, pos };
             break;
         }
         obj->uid = uid;

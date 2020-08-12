@@ -4,7 +4,7 @@
 #include "Transform.h"
 #include <xmemory>
 #include"GameObject.h"
-
+#include"Player.h"
 Bullet::Bullet()
 {
 	type = ObjectType::BULLET;
@@ -16,11 +16,11 @@ void Bullet::Update()
 {
 	if (position.x <= 0 || position.y <= 0)
 	{
-		ObjectManager::DeleteObject(this);
+		Die();
 	}
 	if(position.x >= WINDOW_WIDTH || position.y >= WINDOW_HEIGHT)
 	{ 
-		ObjectManager::DeleteObject(this);
+		Die();
 	}
 }
 
@@ -47,16 +47,16 @@ void Bullet::OnCollision(const CollisionEvent& event)
 	{
 		if (event.other->type == ObjectType::MONSTER && this->isAlias == true)
 		{
-			ObjectManager::DeleteObject(this);
+			Die();
 		}
 		if (event.other->type == ObjectType::PLAYER && this->isAlias == false)
 		{
-			ObjectManager::DeleteObject(this);
+			Die();
 		}
 	}
 }
 
-void MetaBullet::Initialize(GameObject* _pObject, BulletType _type, const DirectX::XMFLOAT2& pos, float rad, bool _isAlias)
+void MetaBullet::Initialize(std::shared_ptr<GameObject>& _pObject, BulletType _type, const DirectX::XMFLOAT2& pos, float rad, bool _isAlias)
 {
 	if (_pObject == nullptr)
 	{
@@ -66,58 +66,59 @@ void MetaBullet::Initialize(GameObject* _pObject, BulletType _type, const Direct
 	{
 		return;
 	}
-	Bullet* pBullet = (Bullet*)_pObject;
-	auto uid = pBullet->uid;
+	std::shared_ptr<Bullet> bullet = std::static_pointer_cast<Bullet>(_pObject);
+	
+	auto uid = bullet->uid;
 	switch (_type)
 	{
 	case BulletType::_01:
-		pBullet->~Bullet();
-		new(pBullet) Bullet01{};
+		bullet->~Bullet();
+		new(bullet.get()) Bullet01{};
 		break;
 	case BulletType::_02:
-		pBullet->~Bullet();
-		new(pBullet) Bullet02{};
+		bullet->~Bullet();
+		new(bullet.get()) Bullet02{};
 		break;
 	case BulletType::_03:
-		pBullet->~Bullet();
-		new(pBullet) Bullet03{};
+		bullet->~Bullet();
+		new(bullet.get()) Bullet03{};
 		break;
 	case BulletType::_04:
-		pBullet->~Bullet();
-		new(pBullet) Bullet04{};
+		bullet->~Bullet();
+		new(bullet.get()) Bullet04{};
 		break;
 	case BulletType::_05:
-		pBullet->~Bullet();
-		new(pBullet) Bullet05{};
+		bullet->~Bullet();
+		new(bullet.get()) Bullet05{};
 		break;
 	case BulletType::_06:
-		pBullet->~Bullet();
-		new(pBullet) Bullet06{};
+		bullet->~Bullet();
+		new(bullet.get()) Bullet06{};
 		break;
 	case BulletType::_07:
-		pBullet->~Bullet();
-		new(pBullet) Bullet07{};
+		bullet->~Bullet();
+		new(bullet.get()) Bullet07{};
 		break;
 	case BulletType::_08:
-		pBullet->~Bullet();
-		new(pBullet) Bullet08{};
+		bullet->~Bullet();
+		new(bullet.get()) Bullet08{};
 		break;
 	case BulletType::_09:
-		pBullet->~Bullet();
-		new(pBullet) Bullet09{};
+		bullet->~Bullet();
+		new(bullet.get()) Bullet09{};
 		break;
 	case BulletType::_10:
-		pBullet->~Bullet();
-		new(pBullet) Bullet010{};
-		static_cast<Bullet010*>(pBullet)->Initialize(pos, rad);
+		bullet->~Bullet();
+		new(bullet.get()) Bullet010{};
+		std::static_pointer_cast<Bullet010>(_pObject)->Initialize(pos, rad);
 		break;
-		
+
 	}
-	pBullet->uid = uid;
-	pBullet->position = pos;
-	pBullet->radian = rad;
-	pBullet->bulletType = _type;
-	pBullet->isAlias = _isAlias;
+	bullet->uid = uid;
+	bullet->position = pos;
+	bullet->radian = rad;
+	bullet->bulletType = _type;
+	bullet->isAlias = _isAlias;
 }
 
 Bullet01::Bullet01()
@@ -366,7 +367,6 @@ Bullet010::Bullet010()
 void Bullet010::Initialize(const DirectX::XMFLOAT2& pos, float radAngle)
 {
 	//정보 초기화
-	m_info = DirectX::XMMatrixRotationZ(radAngle) * DirectX::XMMatrixTranslation(pos.x, pos.y, 0.f);
 }
 
 void Bullet010::Update()
@@ -376,48 +376,37 @@ void Bullet010::Update()
 	if (m_fStackTime > 4.5f)
 	{
 		if (m_fStackTime > 6.f)
-			ObjectManager::DeleteObject(this);
+			Die();
 		Move();
 	}
 	else
 	{
-		Character const* const pPlayer = (Character*)ObjectManager::GetInstance()->pPlayer;
+
+		
+		auto pPlayer = std::static_pointer_cast<Character>(ObjectManager::GetInstance()->pPlayer.lock());
 		if (pPlayer == nullptr)
 			return;
-		//이렇게 하면 행렬에서 현재 총알의 XY좌표를 알 수 있다.
-		DirectX::XMVECTOR bulletPos{};
-		DirectX::XMVECTOR bulletXAxis{ DirectX::XMVector3Transform(DirectX::XMVectorSet(1.f, 0.f, 0.f, 0.f), m_info) };
-		DirectX::XMVECTOR bulletYAxis{ DirectX::XMVector3Transform(DirectX::XMVectorSet(0.f, 1.f, 0.f, 0.f), m_info) };
-		DirectX::XMVECTOR playerPos{ DirectX::XMLoadFloat2(&pPlayer->position) };
-		bulletPos = DirectX::XMVector3TransformCoord(bulletPos, m_info);
-		
+
 		DirectX::XMVECTOR dpos =
-			DirectX::XMVector3Normalize(playerPos - bulletPos);
+			DirectX::XMVector3Normalize(DirectX::XMLoadFloat2(&pPlayer->position) - DirectX::XMLoadFloat2(&this->position));
 		DirectX::XMVECTOR forward{ DirectX::XMVectorSet(1.f,0.f,0.f,0.f) };
-		auto tmp{ DirectX::XMVector3Dot(dpos, bulletXAxis) };
+		auto tmp{ DirectX::XMVector3Dot(dpos, forward) };
 		float cosV = DirectX::XMVectorGetZ(tmp);
 		float radian = acosf(cosV);
-		if (DirectX::XMConvertToRadians(90.f) >= radian)
-		{
-			radian = DirectX::XMConvertToRadians(90.f);
-		}
-		if (DirectX::XMVectorGetY(DirectX::XMVector3Dot(playerPos, bulletYAxis)) < 0.f  )
+		if (pPlayer->position.y < this->position.y)
 			radian *= -1.f;
-		m_info = DirectX::XMMatrixRotationZ(radian) * m_info;
-		m_info = DirectX::XMMatrixTranslation(speed, 0.f, 0.f) * m_info;
-		bulletPos = DirectX::XMVector3TransformCoord(bulletPos, m_info);
-		DirectX::XMStoreFloat2(&position, bulletPos);
+
 		this->radian = radian;
+
 		Move();
 		Bullet::Update();
 	}
-
 }
 
 void Bullet010::Render()
 {
-	Character const* const pPlayer = (Character*)ObjectManager::GetInstance()->pPlayer;
-	if (pPlayer == nullptr)
+	std::shared_ptr<Player> player = std::static_pointer_cast<Player>(ObjectManager::GetInstance()->pPlayer.lock());
+	if (player == nullptr)
 		return;
 
 	DirectX::XMFLOAT2 fVertexArray[3] = 

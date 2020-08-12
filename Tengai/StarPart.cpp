@@ -11,12 +11,11 @@ StarPart::StarPart()
 	currentMoveState = nullptr;
 }
 
-GameObject* StarPart::Initialize(GameObject* const obj, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos, const float BasicDegree)
+std::shared_ptr<GameObject> StarPart::Initialize(const std::shared_ptr<GameObject>& obj, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos, const float BasicDegree)
 {
 	if (obj->type == ObjectType::MONSTER)
 	{
-		Monster* self = static_cast<Monster*>(obj);
-		dynamic_cast<StarPart*>(self)->Initialize(monsterType, firstPos, BasicDegree);
+		std::static_pointer_cast<StarPart>(obj)->Initialize(monsterType, firstPos, BasicDegree);
 	}
 	return obj;
 }
@@ -156,7 +155,7 @@ void StarPart::OnCollision(const CollisionEvent& event)
 {
 	if (event.other->type == ObjectType::BULLET && this->isEnable)
 	{
-		const Bullet* const pBullet = (const Bullet*)event.other;
+		auto pBullet = std::static_pointer_cast<Bullet>(event.other);
 		hp -= pBullet->isAlias;
 		if (hp <= 0)
 		{
@@ -164,7 +163,7 @@ void StarPart::OnCollision(const CollisionEvent& event)
 			if (monsterType == MonsterType::BOSS)
 			{
 				GameObject::Die();
-				UI* ui = (UI*)ObjectManager::CreateObject<GameWinBox>(ObjectType::UI);
+				auto ui = std::static_pointer_cast<UI>(ObjectManager::CreateObject<GameWinBox>(ObjectType::UI));
 				if (SceneManager::GetInstance()->pCurrentScene->ShowBox(ui) == false)
 				{
 					SceneManager::GetInstance()->pCurrentScene->HideBox();

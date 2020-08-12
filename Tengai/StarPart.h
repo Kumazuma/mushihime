@@ -5,7 +5,7 @@ class StarPart :
 {
 public:
 	StarPart();
-	static GameObject* Initialize(GameObject* const obj, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos, const float BasicDegree);
+	static std::shared_ptr<GameObject> Initialize(const std::shared_ptr<GameObject>& obj, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos, const float BasicDegree);
 	void Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& firstPos, const float BasicDegree);
 	~StarPart();
 	void Update() override;

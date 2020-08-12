@@ -2,6 +2,7 @@
 #include "CharacterState.h"
 #include "TimeManager.h"
 #include "Bullet.h"
+#include "Player.h"
 BezierCurveMoveToState::BezierCurveMoveToState(Character* const _pCharacter, const DirectX::XMFLOAT2& _start, const DirectX::XMFLOAT2& _center, const DirectX::XMFLOAT2& _dest) :
 	MoveToState{ _pCharacter, _start, _dest }, center{ _center }
 {
@@ -135,24 +136,24 @@ bool FocusOnPlayerFireState::Update()
 			break;
 		}
 		//사격
-		Character const * const pPlayer = (Character*)ObjectManager::GetInstance()->pPlayer;
-		if (pPlayer == nullptr)
+		std::shared_ptr<Player> player = std::static_pointer_cast<Player>(ObjectManager::GetInstance()->pPlayer.lock());
+		if (player == nullptr)
 		{
 			break;
 		}
 		DirectX::XMVECTOR dpos =
-			DirectX::XMVector3Normalize(DirectX::XMLoadFloat2(&pPlayer->position) - DirectX::XMLoadFloat2(&pCharacter->position));
+			DirectX::XMVector3Normalize(DirectX::XMLoadFloat2(&player->position) - DirectX::XMLoadFloat2(&pCharacter->position));
 		//기준 벡터를 하나 임시로 정의한다.
 		DirectX::XMVECTOR forward{ DirectX::XMVectorSet(1.f,0.f,0.f,0.f) };
 		//두 단위 벡터의 도트곱(내적)은 두 벡터의 끼인 각의 Cos이다 
 		auto tmp{ DirectX::XMVector3Dot(dpos, forward) };
 		float cosV = DirectX::XMVectorGetZ(tmp);
 		float radian = acosf(cosV);
-		if (pPlayer->position.y < pCharacter->position.y)
+		if (player->position.y < pCharacter->position.y)
 		{
 			radian *= -1.f;
 		}
-		GameObject* bullet = ObjectManager::CreateObject<Bullet010>(ObjectType::BULLET);
+		std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject<Bullet010>(ObjectType::BULLET);
 		MetaBullet::Initialize(bullet, BulletType::_10/*_01*/, pCharacter->position, radian, false);
 		tick -= interval;
 	} while (false);
@@ -208,7 +209,7 @@ bool FlowerFireState::Update()
 			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
-			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_03, pos, radian, false);
 		}
 		tick -= interval;
@@ -240,7 +241,7 @@ bool FlowerCurvesFireState::Update()
 			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
-			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_02, pos, radian, false); 
 		}
 		tick -= interval;
@@ -289,7 +290,7 @@ bool PlayerBasicAttackState::Update()
 	{
 		if (tick >= interval)
 		{
-			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_04, pCharacter->position, -1.f * 90.f * 3.14f / 180, true);
 			tick = 0;
 		}
@@ -305,7 +306,7 @@ bool PlayerAdditionalAttackState::Update()
 	{
 		if (tick >= interval)
 		{
-			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_05, pCharacter->position, 1.5f, true);
 		}
 	}
@@ -338,7 +339,7 @@ bool UniqueFlowerFireState::Update()
 			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
-			GameObject* bullet = ObjectManager::CreateObject<Bullet07>(ObjectType::BULLET);
+			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject<Bullet07>(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_07, pos, radian, true);
 		}
 		tick -= interval;
@@ -371,7 +372,7 @@ bool UniqueWarmFireState::Update()
 			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
-			GameObject* bullet = ObjectManager::CreateObject<Bullet08>(ObjectType::BULLET);
+			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject<Bullet08>(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_08, pos, radian, true);
 		}
 		tick -= interval;
@@ -404,7 +405,7 @@ bool ZigzagWarmFireState::Update()
 			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
-			GameObject* bullet = ObjectManager::CreateObject<Bullet09>(ObjectType::BULLET);
+			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject<Bullet09>(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_09, pos, radian, true);
 		}
 		tick -= interval;
@@ -426,24 +427,24 @@ bool GuidedBulletFireState::Update()
 			break;
 		}
 		//사격
-		Character const* const pPlayer = (Character*)ObjectManager::GetInstance()->pPlayer;
-		if (pPlayer == nullptr)
+		auto player = std::static_pointer_cast<Character>(ObjectManager::GetInstance()->pPlayer.lock());
+		if (player == nullptr)
 		{
 			break;
 		}
 		DirectX::XMVECTOR dpos =
-			DirectX::XMVector3Normalize(DirectX::XMLoadFloat2(&pPlayer->position) - DirectX::XMLoadFloat2(&pCharacter->position));
+			DirectX::XMVector3Normalize(DirectX::XMLoadFloat2(&player->position) - DirectX::XMLoadFloat2(&pCharacter->position));
 		//기준 벡터를 하나 임시로 정의한다.
 		DirectX::XMVECTOR forward{ DirectX::XMVectorSet(1.f,0.f,0.f,0.f) };
 		//두 단위 벡터의 도트곱(내적)은 두 벡터의 끼인 각의 Cos이다 
 		auto tmp{ DirectX::XMVector3Dot(dpos, forward) };
 		float cosV = DirectX::XMVectorGetZ(tmp);
 		float radian = acosf(cosV);
-		if (pPlayer->position.y < pCharacter->position.y)
+		if (player->position.y < pCharacter->position.y)
 		{
 			radian *= -1.f;
 		}
-		GameObject* bullet = ObjectManager::CreateObject<Bullet010>(ObjectType::BULLET);
+		std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject<Bullet010>(ObjectType::BULLET);
 		MetaBullet::Initialize(bullet, BulletType::_10, pCharacter->position, radian, false);
 		tick -= interval;
 	} while (false);

@@ -12,7 +12,8 @@ Player::Player()
 	speed = 250;
 	width = 30;
 	height = 30;
-	hp = 3;
+#undef max;
+	hp = std::numeric_limits<int>::max();
 	type = ObjectType::PLAYER;
 	simpleCollider = { -15,-15,15,15 };
 	pFireState = new PlayerBasicAttackState{ this, 0.15f };
@@ -123,7 +124,7 @@ void Player::OnCollision(const CollisionEvent& event)
 {
 	if (event.other->type == ObjectType::BULLET)
 	{
-		auto* pBullet = (Bullet*)event.other;
+		auto pBullet = std::static_pointer_cast<Bullet>(event.other);
 		if (pBullet->isAlias == false)
 		{
 			//나는 맞았다.
@@ -147,7 +148,7 @@ void Player::OnCollision(const CollisionEvent& event)
 	}
 	else if (event.other->type == ObjectType::ITEM)
 	{
-		Item* pItem = (Item*)event.other;
+		auto pItem = std::static_pointer_cast<Item>(event.other);
 		switch (pItem->itemType)
 		{
 		case ItemType::HEAL:
@@ -222,7 +223,7 @@ void Player::Move(Direction _direction)
 void Player::Die()
 {
 	GameObject::Die();
-	UI* ui = (UI*)ObjectManager::CreateObject<GameOverBox>(ObjectType::UI);
+	auto ui = std::static_pointer_cast<UI>(ObjectManager::CreateObject<GameOverBox>(ObjectType::UI));
 	SceneManager::GetInstance()->pCurrentScene->HideBox();
 	if (SceneManager::GetInstance()->pCurrentScene->ShowBox(ui) )
 	{
@@ -236,7 +237,7 @@ void Player::SinWave()
 	if (sinLeftTime > 0) return;
 	sinLeftTime = sinCoolTime;
 
-	GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+	std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject(ObjectType::BULLET);
 	MetaBullet::Initialize(bullet, BulletType::_05, this->position, float(PI/2), true);
 }
 
@@ -272,7 +273,7 @@ void Player::UpdateSpecialMove()
 			for (int i = 0; i < n; i++)
 			{
 				float rad = unit * i;
-				GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+				std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject(ObjectType::BULLET);
 				MetaBullet::Initialize(bullet, BulletType::_06, this->position, rad, true);
 			}
 			tick -= interval;

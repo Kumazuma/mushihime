@@ -16,7 +16,7 @@ class Item : public Character
 public:
 	Item();
 	Item(ItemType _type, const DirectX::XMFLOAT2& pos);
-	static GameObject* Initialize(GameObject* const obj, ItemType _type, const DirectX::XMFLOAT2& pos);
+	static std::shared_ptr<GameObject> Initialize(const std::shared_ptr<GameObject>& obj, ItemType _type, const DirectX::XMFLOAT2& pos);
 	virtual ~Item();
 	virtual void Update() override;
 	void OnCollision(const CollisionEvent& event);
