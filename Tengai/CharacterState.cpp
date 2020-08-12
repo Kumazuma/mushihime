@@ -152,7 +152,7 @@ bool FocusOnPlayerFireState::Update()
 		{
 			radian *= -1.f;
 		}
-		GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+		GameObject* bullet = ObjectManager::CreateObject<Bullet010>(ObjectType::BULLET);
 		MetaBullet::Initialize(bullet, BulletType::_10/*_01*/, pCharacter->position, radian, false);
 		tick -= interval;
 	} while (false);
@@ -338,7 +338,7 @@ bool UniqueFlowerFireState::Update()
 			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
-			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+			GameObject* bullet = ObjectManager::CreateObject<Bullet07>(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_07, pos, radian, true);
 		}
 		tick -= interval;
@@ -371,7 +371,7 @@ bool UniqueWarmFireState::Update()
 			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
-			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+			GameObject* bullet = ObjectManager::CreateObject<Bullet08>(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_08, pos, radian, true);
 		}
 		tick -= interval;
@@ -404,7 +404,7 @@ bool ZigzagWarmFireState::Update()
 			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
-			GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+			GameObject* bullet = ObjectManager::CreateObject<Bullet09>(ObjectType::BULLET);
 			MetaBullet::Initialize(bullet, BulletType::_09, pos, radian, true);
 		}
 		tick -= interval;
@@ -443,7 +443,7 @@ bool GuidedBulletFireState::Update()
 		{
 			radian *= -1.f;
 		}
-		GameObject* bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+		GameObject* bullet = ObjectManager::CreateObject<Bullet010>(ObjectType::BULLET);
 		MetaBullet::Initialize(bullet, BulletType::_10, pCharacter->position, radian, false);
 		tick -= interval;
 	} while (false);
