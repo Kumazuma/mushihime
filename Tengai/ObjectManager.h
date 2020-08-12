@@ -38,7 +38,6 @@ public:
 
 	list<GameObject*>objectTable[ENUM_MAX<ObjectType>()];
 	list<GameObject*>objectList;
-	MemoryPool<Bullet> bulletPool;
 };
 
 template<typename ObjT, typename ...Arg>

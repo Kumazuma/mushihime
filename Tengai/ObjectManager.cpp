@@ -24,14 +24,7 @@ ObjectManager::~ObjectManager()
 	BackGround::Release();
 	for (auto it : pObjectManager->objectList)
 	{
-		if (it->type != ObjectType::BULLET)
-		{
-			delete it;
-		}
-		else
-		{
-			this->bulletPool.Free((Bullet*)it);
-		}
+		delete it;
 		
 	}
 	pObjectManager->objectList.clear();
@@ -72,7 +65,7 @@ GameObject * ObjectManager::CreateObject(ObjectType _type)
 		break;
 	}
 	case ObjectType::BULLET:
-		pObj = pObjectManager->bulletPool.Alloc();
+		pObj = new Bullet{};
 		break;
 	case ObjectType::ITEM:
 		pObj = new Item{};
@@ -174,15 +167,7 @@ void ObjectManager::LateUpdate()
 				auto findResult = find(goList.begin(), goList.end(), (*iter));
 				goList.erase(findResult);
 				iter = objList.erase(iter);
-
-				if (target->type == ObjectType::BULLET)
-				{
-					pObjectManager->bulletPool.Free((Bullet*)target);
-				}
-				else
-				{
-					delete target;
-				}
+				delete target;
 			}
 			else
 			{
