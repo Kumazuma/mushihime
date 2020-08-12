@@ -12,6 +12,8 @@ enum class BulletType
 	_06,
 	_07,
 	_08,
+	_09,
+	_10,
 
 	END
 };
@@ -99,4 +101,30 @@ public:
 
 private:
 	float m_fStackTime;
+	int m_iCheckNum;
+};
+
+class Bullet09 : public Bullet
+{
+public:
+	Bullet09();
+	virtual void Update() override;
+	virtual void Render() override;
+
+private:
+	float m_fStackTime;
+	int m_iCheckNum;
+};
+
+// 일정시간 유도탄
+class Bullet010 : public Bullet
+{
+public:
+	Bullet010();
+	virtual void Update() override;
+	virtual void Render() override;
+
+private:
+	float m_fStackTime;
+	float m_fAlphaNum; 
 };
