@@ -75,6 +75,7 @@ void Star::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& firstPo
 	simpleCollider = CreateSimpleCollider(colliders);
 	currentMoveState = this->moveStateList.front();
 	currentMoveState->Reset();
+
 }
 
 Star::~Star()

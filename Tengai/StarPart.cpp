@@ -53,6 +53,26 @@ void StarPart::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& fir
 	moveStateList[1]->pNextState = moveStateList[2];
 	moveStateList[2]->pNextState = moveStateList[1];
 
+
+	// 공격패턴
+	fireStateList.push_back(
+		new WaitState{ 0.1f });
+	fireStateList.push_back(
+		new CrossCurvesFireState{ this, 0.2f, 3.f });
+	fireStateList.push_back(
+		new WaitState{ 1 });
+	speed = 100;
+
+	fireStateList[0]->pNextState = fireStateList[1];
+	fireStateList[1]->pNextState = fireStateList[2];
+	fireStateList[2]->pNextState = fireStateList[0];
+	monsterRect = RECT{ -18, -18, 18, 18 };
+	colliders.push_back(RECT{ -16, -16, 16, 16 });
+	hp = 1;
+
+	currentFireState = this->fireStateList.front();
+	currentFireState->Reset();
+
 	DirectX::XMMATRIX matStar, Scale, RotZ, Trans, RevZ, Parent;
 	matStar = DirectX::XMMatrixIdentity();
 	Scale = DirectX::XMMatrixScaling(1.f, 1.f, 0.f);

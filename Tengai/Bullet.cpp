@@ -385,8 +385,6 @@ void Bullet010::Update()
 	}
 	else
 	{
-
-		
 		auto pPlayer = std::static_pointer_cast<Character>(ObjectManager::GetInstance()->pPlayer.lock());
 		if (pPlayer == nullptr)
 			return;
