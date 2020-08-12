@@ -30,7 +30,7 @@ std::shared_ptr<GameObject> Star::Initialize(const std::shared_ptr<GameObject>& 
 void Star::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& firstPos)
 {
 	Bind(EventId::PASS_TIME, &Monster::OnShow);
-	Bind(EventId::COLLISION_OBJ, &Monster::OnCollision);
+	Bind(EventId::COLLISION_OBJ, &Star::OnCollision);
 	position = firstPos;
 	m_vecParts = {
 		{ StarPart::Initialize(ObjectManager::CreateObject<StarPart>(ObjectType::MONSTER), MonsterType::MOB01, position, 0.f) },
@@ -67,14 +67,30 @@ void Star::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& firstPo
 	moveStateList[1]->pNextState = moveStateList[2];
 	moveStateList[2]->pNextState = moveStateList[1];
 
+	// 공격패턴
+	fireStateList.push_back(
+		new WaitState{ 0.1f });
+	fireStateList.push_back(
+		new CrossCurvesFireState{ this, 0.2f, 3.f });
+	fireStateList.push_back(
+		new WaitState{ 1 });
+	speed = 100;
+
+	fireStateList[0]->pNextState = fireStateList[1];
+	fireStateList[1]->pNextState = fireStateList[2];
+	fireStateList[2]->pNextState = fireStateList[0];
+	currentFireState = this->fireStateList.front();
+	currentFireState->Reset();
+
 	monsterRect = RECT{ -36, -36, 36, 36 };
 	colliders.push_back(RECT{ -32, -32, 32, 32 });
-	hp = 10;
+	hp = MAX_HP;
 
 	monsterType = _monsterType;
 	simpleCollider = CreateSimpleCollider(colliders);
 	currentMoveState = this->moveStateList.front();
 	currentMoveState->Reset();
+	m_radian = 0.f;
 }
 
 Star::~Star()
@@ -121,11 +137,13 @@ void Star::Update()
 			}
 		}
 	}
-	if (monsterType == MonsterType::STAR)
+	m_radian += 2 * 3.141592f * TimeManager::DeltaTime();
+	auto mat{ DirectX::XMMatrixRotationZ(m_radian) * DirectX::XMMatrixTranslation(position.x, position.y, 0.f) };
+	for (auto& it : m_vecParts)
 	{
-		position.x += 1;
+		auto star = std::static_pointer_cast<StarPart>(it);
+		star->SetCenter(mat);
 	}
-	
 }
 
 void Star::Render()
@@ -135,6 +153,7 @@ void Star::Render()
 	//{
 	//	iter->Render();
 	//}
+	RenderManager::DrawCircle(monsterRect + position, RGB(255, 0, 0), RGB(255, 0, 0));
 }
 
 void Star::OnShow(const Event&)
@@ -148,9 +167,24 @@ void Star::OnCollision(const CollisionEvent& event)
 	if (event.other->type == ObjectType::BULLET && this->isEnable)
 	{
 		auto pBullet = std::static_pointer_cast<Bullet>(event.other);
-		hp -= pBullet->isAlias;
+		if (pBullet->isAlias == false)
+		{
+			return;
+		}
+		hp -= pBullet->isAlias == true;
+		const float MAX_HP{ static_cast<float>(Star::MAX_HP) };
+		int percent{static_cast<int>(hp * 100.f / MAX_HP) };
+		if (percent % 10 == 0 && hp != Star::MAX_HP && m_vecParts.empty() == false)
+		{
+			ObjectManager::DeleteObject(m_vecParts.back());
+			m_vecParts.pop_back();
+		}
 		if (hp <= 0)
 		{
+			for (auto& it : m_vecParts)
+			{
+				ObjectManager::DeleteObject(it);
+			}
 			Die();
 			if (monsterType == MonsterType::BOSS)
 			{

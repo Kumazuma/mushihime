@@ -53,16 +53,24 @@ void StarPart::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& fir
 	moveStateList[1]->pNextState = moveStateList[2];
 	moveStateList[2]->pNextState = moveStateList[1];
 
+
+	
+	monsterRect = RECT{ -18, -18, 18, 18 };
+	colliders.push_back(RECT{ -16, -16, 16, 16 });
+	hp = 1;
+
+	
+
 	DirectX::XMMATRIX matStar, Scale, RotZ, Trans, RevZ, Parent;
-	matStar = DirectX::XMMatrixIdentity();
+	
 	Scale = DirectX::XMMatrixScaling(1.f, 1.f, 0.f);
 	RotZ = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(0.f));
 	Trans = DirectX::XMMatrixTranslation(0.f, -50.f, 0.f);
 	RevZ = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(m_BasicDegree + m_Degree));
-	Parent = DirectX::XMMatrixTranslation(position.x, position.y, 0.f);
-	matStar = Scale * RotZ * Trans * RevZ * Parent;
 
-	auto s{ DirectX::XMVector3TransformCoord(DirectX::XMVectorSet(0.f, 0.f, 0.f, 0.f), Parent) };
+	matStar = Scale * RotZ * Trans * RevZ * m_parent;
+
+	auto s{ DirectX::XMVector3TransformCoord(DirectX::XMVectorSet(0.f, 0.f, 0.f, 0.f), matStar) };
 	DirectX::XMStoreFloat2(&position, s);
 
 	monsterRect = RECT{ -18, -18, 18, 18 };
@@ -92,36 +100,36 @@ StarPart::~StarPart()
 
 void StarPart::Update()
 {
-	if (isEnable == false)
-	{
-		return;
-	}
-	if (currentMoveState != nullptr)
-	{
-		if (currentMoveState->Update())
-		{
-			auto pNext = currentMoveState->pNextState;
-			if (pNext != nullptr)
-			{
-				pNext->Reset();
-				currentMoveState = pNext;
-			}
-		}
-	}
-	if (currentFireState != nullptr)
-	{
-		if (currentFireState->Update())
-		{
-			auto pNext = currentFireState->pNextState;
-			if (pNext != nullptr)
-			{
-				pNext->Reset();
-				currentFireState = pNext;
-			}
-		}
-	}
+	//if (isEnable == false)
+	//{
+	//	return;
+	//}
+	//if (currentMoveState != nullptr)
+	//{
+	//	if (currentMoveState->Update())
+	//	{
+	//		auto pNext = currentMoveState->pNextState;
+	//		if (pNext != nullptr)
+	//		{
+	//			pNext->Reset();
+	//			currentMoveState = pNext;
+	//		}
+	//	}
+	//}
+	//if (currentFireState != nullptr)
+	//{
+	//	if (currentFireState->Update())
+	//	{
+	//		auto pNext = currentFireState->pNextState;
+	//		if (pNext != nullptr)
+	//		{
+	//			pNext->Reset();
+	//			currentFireState = pNext;
+	//		}
+	//	}
+	//}
 		//position.x += 1;
-		m_Degree += 1.f;
+		
 	
 }
 
@@ -136,15 +144,14 @@ void StarPart::Render()
 	auto scale{ DirectX::XMMatrixScaling(1.f, 1.f, 0.f) };
 	auto rot{ DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(0.f)) };
 	auto trans{ DirectX::XMMatrixTranslation(0.f, -50.f, 0.f) };
-	auto RevZ{ DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(m_BasicDegree + m_Degree)) };
-	auto Parent = DirectX::XMMatrixTranslation(position.x, position.y, 0.f);
-	auto transform = scale * rot * trans * RevZ * Parent;
+	auto RevZ{ DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(m_BasicDegree)) };
+	auto transform = scale * rot * trans * RevZ * m_parent;
 	for (int i = 0; i < 3; ++i)
 	{
 		triangle[i] = DirectX::XMVector3TransformCoord(triangle[i], transform);
 	}
 	RenderManager::DrawTriangle(triangle);
-	RenderManager::DrawCircle(monsterRect + position);
+	//RenderManager::DrawCircle(monsterRect + position);
 }
 
 void StarPart::OnShow(const Event&)
@@ -188,4 +195,17 @@ void StarPart::OnCollision(const CollisionEvent& event)
 			Item::Initialize(ObjectManager::CreateObject(ObjectType::ITEM), itemType, position);
 		}
 	}
+}
+
+void StarPart::SetCenter(const DirectX::XMMATRIX& parent)
+{
+	m_parent = parent;
+	DirectX::XMMATRIX matStar, Scale, RotZ, Trans, RevZ, Parent;
+
+	Scale = DirectX::XMMatrixScaling(1.f, 1.f, 0.f);
+	RotZ = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(0.f));
+	Trans = DirectX::XMMatrixTranslation(0.f, -50.f, 0.f);
+	RevZ = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(m_BasicDegree + m_Degree));
+	auto position{ DirectX::XMVector3TransformCoord(DirectX::XMVectorSet(0.f,0.f,0.f,0.f), Scale * Trans * RevZ * m_parent) };
+	DirectX::XMStoreFloat2(&this->position, position);
 }

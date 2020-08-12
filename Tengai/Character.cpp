@@ -12,14 +12,13 @@ void Character::Render()
 
 bool Character::Collision(const std::shared_ptr<GameObject>& _target)
 {
-	
-	auto target{ std::dynamic_pointer_cast<const Character>(_target) };
+	if (_target->type == type) return false;
+	auto* target{ static_cast<const Character*>(_target.get()) };
 	if (target == nullptr) return false;
-	if (target->type == type) return false;
 
-	RECT myBox = this->simpleCollider + this->position;
-	RECT targetBox = target->simpleCollider + target->position;
-	RECT outBox;
+	RECT myBox{ this->simpleCollider + this->position };
+	RECT targetBox{ target->simpleCollider + target->position };
+	RECT outBox{};
 
 	if (!IntersectRect(&outBox, &myBox, &targetBox)) return false;
 

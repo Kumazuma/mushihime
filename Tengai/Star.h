@@ -4,6 +4,7 @@ class Star :
     public Monster
 {
 public:
+	static constexpr int MAX_HP = 10;
 	Star();
 	static std::shared_ptr<GameObject> Initialize(const std::shared_ptr<GameObject>& self, MonsterType monsterType, const DirectX::XMFLOAT2& firstPos);
 	void Initialize(MonsterType monsterType, const DirectX::XMFLOAT2& firstPos);
@@ -15,4 +16,5 @@ public:
 	//variable
 private:
 	std::vector<std::shared_ptr<GameObject> > m_vecParts;
+	float m_radian;
 };

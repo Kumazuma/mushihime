@@ -12,8 +12,10 @@ public:
 	void Render() override;
 	void OnShow(const Event&);
 	void OnCollision(const CollisionEvent& event);
+	void SetCenter(const DirectX::XMMATRIX& parent);
 private:
 	float m_BasicDegree = 0.f;
 	float m_Degree = 0.f;
+	DirectX::XMMATRIX m_parent;
 };
 
