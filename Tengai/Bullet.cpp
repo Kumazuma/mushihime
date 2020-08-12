@@ -112,7 +112,10 @@ void MetaBullet::Initialize(std::shared_ptr<GameObject>& _pObject, BulletType _t
 		new(bullet.get()) Bullet010{};
 		std::static_pointer_cast<Bullet010>(_pObject)->Initialize(pos, rad);
 		break;
-
+	case BulletType::_11:
+		bullet->~Bullet();
+		new(bullet.get()) Bullet011{};
+		break;
 	}
 	bullet->uid = uid;
 	bullet->position = pos;
@@ -372,6 +375,7 @@ void Bullet010::Initialize(const DirectX::XMFLOAT2& pos, float radAngle)
 void Bullet010::Update()
 {
 	m_fStackTime += TimeManager::GetInstance()->DeltaTime();
+	m_fScalingStackTime += DELTA_TIME;
 
 	if (m_fStackTime > 4.5f)
 	{
@@ -420,11 +424,28 @@ void Bullet010::Render()
 	for (int i = 0; i < 3; i++)
 		vecVertexArray[i] = DirectX::XMLoadFloat2(&fVertexArray[i]);
 
-	DirectX::XMMATRIX matWorld, matRot, matParent;
+	DirectX::XMMATRIX matWorld, matScale, matRot, matParent;
+
+	if (m_fScalingStackTime > 0.15f)
+	{
+		if (m_fScalingStackTime > 0.3f)
+		{
+			m_fScalingStackTime = 0.f;
+			m_fAddValue = 0.f;
+		}
+			
+		m_fAddValue -= 0.03f;
+		matScale = DirectX::XMMatrixScaling(1.f + m_fAddValue, 1.f + m_fAddValue, 0.f);
+	}
+	else
+	{
+		m_fAddValue += 0.03f;
+		matScale = DirectX::XMMatrixScaling(1.f + m_fAddValue, 1.f + m_fAddValue, 0.f);
+	}
 
 	matRot = DirectX::XMMatrixRotationZ(radian);
 	matParent = DirectX::XMMatrixTranslation(position.x, position.y, 0.f);
-	matWorld = matRot * matParent;
+	matWorld = matScale * matRot * matParent;
 
 	for (int i = 0; i < 3; i++)
 		vecVertexArray[i] = DirectX::XMVector2TransformCoord(vecVertexArray[i], matWorld);
@@ -444,4 +465,24 @@ void Bullet010::Render()
 		RenderManager::DrawTriangle(fResultArray, RGB(255, 0, 0));
 	}
 
+}
+
+Bullet011::Bullet011()
+{
+	hp = 999;
+	speed = 200;
+	colliders.push_back(RECT{ -3,-3,3, 3 });
+}
+
+void Bullet011::Update()
+{
+	radian -= PI * 0.5f / 180;
+	
+	Move();
+	Bullet::Update();
+}
+
+void Bullet011::Render()
+{
+	RenderManager::DrawCircle(RECT{ -8, -8, 8, 8 } + position, RGB(255, 130, 0), RGB(255, 0, 0));
 }
