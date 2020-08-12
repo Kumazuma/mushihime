@@ -23,8 +23,8 @@ GameObject* StarPart::Initialize(GameObject* const obj, MonsterType monsterType,
 
 void StarPart::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& firstPos, const float BasicDegree)
 {
-	Bind(EventId::PASS_TIME, &Monster::OnShow);
-	Bind(EventId::COLLISION_OBJ, &Monster::OnCollision);
+	Bind(EventId::PASS_TIME, &StarPart::OnShow);
+	Bind(EventId::COLLISION_OBJ, &StarPart::OnCollision);
 	position = firstPos;
 	isEnable = false;
 	m_BasicDegree = BasicDegree;
@@ -66,14 +66,15 @@ void StarPart::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& fir
 	auto s{ DirectX::XMVector3TransformCoord(DirectX::XMVectorSet(0.f, 0.f, 0.f, 0.f), Parent) };
 	DirectX::XMStoreFloat2(&position, s);
 
-	monsterRect = RECT{ -36, -36, 36, 36 };
-	colliders.push_back(RECT{ -32, -32, 32, 32 });
-	hp = 10;
+	monsterRect = RECT{ -18, -18, 18, 18 };
+	colliders.push_back(RECT{ -16, -16, 16, 16 });
+	hp = 100;
 
 	monsterType = _monsterType;
 	simpleCollider = CreateSimpleCollider(colliders);
 	currentMoveState = this->moveStateList.front();
 	currentMoveState->Reset();
+	isEnable = true;
 }
 
 StarPart::~StarPart()
@@ -143,6 +144,7 @@ void StarPart::Render()
 		triangle[i] = DirectX::XMVector3TransformCoord(triangle[i], transform);
 	}
 	RenderManager::DrawTriangle(triangle);
+	RenderManager::DrawCircle(monsterRect + position);
 }
 
 void StarPart::OnShow(const Event&)
