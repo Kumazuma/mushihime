@@ -4,6 +4,7 @@
 #include "MainGame.h"
 #include "PauseBox.h"
 #include "GameOverBox.h"
+#include "StarPart.h"
 PlayScene::PlayScene():
     pCurrentShowBox{nullptr}
 {
@@ -18,7 +19,8 @@ void PlayScene::OnLoaded()
     timeline = {
         /*{ 1  ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::BOSS, Transform{ WINDOW_WIDTH + 32, WINDOW_HEIGHT / 2 }) }*/
         { 0 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH + 32, WINDOW_HEIGHT / 2 }) },
-        { 0 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::STAR, DirectX::XMFLOAT2{ WINDOW_WIDTH >> 1, WINDOW_HEIGHT / 2 }) },
+        //{ 0 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::STAR, DirectX::XMFLOAT2{ WINDOW_WIDTH >> 1, WINDOW_HEIGHT / 2 }) },
+        { 1 ,StarPart::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH + 32, WINDOW_HEIGHT / 2 },0.f) },
         { 2 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH + 32, WINDOW_HEIGHT / 2 }) },
         { 4 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH + 32, WINDOW_HEIGHT / 2 }) },
         { 4 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02, DirectX::XMFLOAT2{ WINDOW_WIDTH + 32, WINDOW_HEIGHT / 2 }) },

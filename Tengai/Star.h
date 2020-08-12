@@ -14,4 +14,3 @@ public:
 	void OnCollision(const CollisionEvent& event);
 	//variable
 };
-
