@@ -161,7 +161,7 @@ void Bullet01::Render()
 }
 void Bullet02::Render()
 {
-	RenderManager::DrawCircle(RECT{ -4, -4, 4, 4 } + position, RGB(255, 130, 0), RGB(255, 0, 0));
+	RenderManager::DrawCircle(RECT{ -8, -8, 8, 8 } + position, RGB(255, 130, 0), RGB(255, 0, 0));
 }
 
 void Bullet03::Render()
@@ -256,6 +256,7 @@ void Bullet07::Update()
 			DirectX::XMMatrixRotationZ(radian) *
 			DirectX::XMMatrixTranslationFromVector(pos)
 		};
+
 		pos = DirectX::XMVector3Transform(DirectX::XMVectorSet(0.f, 0.f, 0.f, 1.f), mat);
 		DirectX::XMStoreFloat2(&position, pos);
 	}
