@@ -81,7 +81,7 @@ void StarPart::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& fir
 	simpleCollider = CreateSimpleCollider(colliders);
 	currentMoveState = this->moveStateList.front();
 	currentMoveState->Reset();
-	isEnable = true;
+	isEnable = false;
 }
 
 StarPart::~StarPart()

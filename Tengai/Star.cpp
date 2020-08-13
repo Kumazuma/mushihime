@@ -168,13 +168,17 @@ void Star::Render()
 	//{
 	//	iter->Render();
 	//}
-	RenderManager::DrawCircle(monsterRect + position, RGB(255, 0, 0), RGB(255, 0, 0));
+	if(isEnable)
+		RenderManager::DrawCircle(monsterRect + position, RGB(255, 0, 0), RGB(255, 0, 0));
 }
 
 void Star::OnShow(const Event&)
 {
 	isEnable = true;
-	for (auto& iter : m_vecParts);
+	for (auto& iter : m_vecParts)
+	{
+		iter->isEnable = isEnable;
+	}
 }
 
 void Star::OnCollision(const CollisionEvent& event)
