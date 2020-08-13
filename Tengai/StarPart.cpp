@@ -4,7 +4,8 @@
 #include "item.h"
 #include "GameWinBox.h"
 
-StarPart::StarPart()
+StarPart::StarPart():
+	m_parent{DirectX::XMMatrixIdentity()}
 {
 	this->type = ObjectType::MONSTER;
 	currentFireState = nullptr;
@@ -61,7 +62,7 @@ void StarPart::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& fir
 
 	
 
-	DirectX::XMMATRIX matStar, Scale, RotZ, Trans, RevZ, Parent;
+	DirectX::XMMATRIX matStar, Scale, RotZ, Trans, RevZ;
 	
 	Scale = DirectX::XMMatrixScaling(1.f, 1.f, 0.f);
 	RotZ = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(0.f));
@@ -135,6 +136,10 @@ void StarPart::Update()
 
 void StarPart::Render()
 {
+	if (isEnable == false)
+	{
+		return;
+	}
 	DirectX::XMVECTOR triangle[3]{
 			{0.f, -20.f, 0.f },
 			{ -20.f, 20.f , 0.f },
@@ -200,7 +205,7 @@ void StarPart::OnCollision(const CollisionEvent& event)
 void StarPart::SetCenter(const DirectX::XMMATRIX& parent)
 {
 	m_parent = parent;
-	DirectX::XMMATRIX matStar, Scale, RotZ, Trans, RevZ, Parent;
+	DirectX::XMMATRIX  Scale, RotZ, Trans, RevZ;
 
 	Scale = DirectX::XMMatrixScaling(1.f, 1.f, 0.f);
 	RotZ = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(0.f));

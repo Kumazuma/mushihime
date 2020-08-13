@@ -12,7 +12,7 @@ Player::Player()
 	speed = 250;
 	width = 30;
 	height = 30;
-#undef max;
+#undef max
 	hp = std::numeric_limits<int>::max();
 	type = ObjectType::PLAYER;
 	simpleCollider = { -15,-15,15,15 };
@@ -131,7 +131,7 @@ void Player::Render()
 	{
 		TCHAR str[10] = {};
 		wsprintf(str, TEXT("DEBUGMODE"));
-		RenderManager::DrawString(str, position.x - 50, position.y + 50);
+		RenderManager::DrawString(str,static_cast<int>( position.x - 50),static_cast<int>( position.y + 50) );
 	}
 }
 

@@ -19,21 +19,21 @@ void PlayScene::OnLoaded()
     ObjectManager::CreateObject(ObjectType::PLAYER);
     timeline = {
         /*{ 1  ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::BOSS, Transform{ WINDOW_WIDTH + 32, WINDOW_HEIGHT / 2 }) }*/
-        { 0 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
+        { 0.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
 
                 
-        { 2 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
-        { 4 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
-        { 4 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
-        { 6 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32  }) },
-        { 8 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32  }) },
-        { 9 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2 + 100 , -32 }) },
+        { 2.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
+        { 4.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
+        { 4.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
+        { 6.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32  }) },
+        { 8.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32  }) },
+        { 9.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2 + 100 , -32 }) },
         { 10 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH, -32 }) },
-        { 11 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH, -32 }) },
-        { 16 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH, -32 }) },
-        { 20 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02, DirectX::XMFLOAT2{ WINDOW_WIDTH /2 - 10, -32  }) },
-        { 24 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02, DirectX::XMFLOAT2{ WINDOW_WIDTH /2 + 10, -32  }) },
-        { 28 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02, DirectX::XMFLOAT2{ WINDOW_WIDTH /2 - 20, -32  }) },
+        { 11.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH, -32 }) },
+        { 16.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH, -32 }) },
+        { 20.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02, DirectX::XMFLOAT2{ WINDOW_WIDTH /2 - 10, -32  }) },
+        { 24.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02, DirectX::XMFLOAT2{ WINDOW_WIDTH /2 + 10, -32  }) },
+        { 28.f ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02, DirectX::XMFLOAT2{ WINDOW_WIDTH /2 - 20, -32  }) },
         /*{ 32  ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02,DirectX::XMFLOAT2{ WINDOW_WIDTH /2 + 20, -32  }) },
         { 35 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH, -32 }) },
         { 37 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH, -32 }) },
@@ -47,7 +47,7 @@ void PlayScene::OnLoaded()
         { 50 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH, -32  }) },
         { 51 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH, -32  }) },
         { 60  ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::BOSS, DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -40}) }*/
-        { 30 ,Star::Initialize(ObjectManager::CreateObject<Star>(ObjectType::MONSTER), MonsterType::BOSS, DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
+        { 30.f ,Star::Initialize(ObjectManager::CreateObject<Star>(ObjectType::MONSTER), MonsterType::BOSS, DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
     };
     iter = timeline.begin();
     MainGame::Resume();

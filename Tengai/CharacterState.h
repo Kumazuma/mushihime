@@ -133,6 +133,14 @@ public:
 	bool Update() override;
 };
 
+class ContinueFlowerFireState : public FireState
+{
+public:
+	ContinueFlowerFireState(Character* pCharacter, float _interval, float _time = 9999.f);
+	bool Update() override;
+};
+
+
 //플레이어의 기본 공격
 class PlayerBasicAttackState : public FireState
 {

@@ -5,7 +5,9 @@
 #include <xmemory>
 #include"GameObject.h"
 #include"Player.h"
-Bullet::Bullet()
+Bullet::Bullet():
+	isAlias{},
+	bulletType{BulletType::NONE}
 {
 	type = ObjectType::BULLET;
 	Bind(EventId::COLLISION_OBJ, &Bullet::OnCollision);
@@ -151,7 +153,7 @@ void Bullet01::Update()
 }
 void Bullet02::Update()
 {
-	radian += PI * 0.5f / 180;
+	radian += PI * 0.1f / 180;
 	Move();
 	Bullet::Update();
 }
@@ -365,6 +367,8 @@ Bullet010::Bullet010()
 	colliders.push_back(RECT{ -3,-3,3, 3 });
 	m_fAlphaNum = 0.f;
 	m_fStackTime = 0.f;
+	m_fScalingStackTime = 0.f;
+	m_fAddValue = 0.f;
 }
 
 void Bullet010::Initialize(const DirectX::XMFLOAT2& pos, float radAngle)
@@ -472,7 +476,7 @@ Bullet011::Bullet011()
 
 void Bullet011::Update()
 {
-	radian -= PI * 0.5f / 180;
+	radian -= PI * 0.1f / 180;
 	
 	Move();
 	Bullet::Update();

@@ -4,7 +4,7 @@
 #include "Bullet.h"
 #include "Player.h"
 BezierCurveMoveToState::BezierCurveMoveToState(Character* const _pCharacter, const DirectX::XMFLOAT2& _start, const DirectX::XMFLOAT2& _center, const DirectX::XMFLOAT2& _dest) :
-	MoveToState{ _pCharacter, _start, _dest }, center{ _center }
+	MoveToState{ _pCharacter, _start, _dest }, center{ _center },next{}
 {
 
 }
@@ -526,6 +526,39 @@ bool CrossCurvesFireState::Update()
 			MetaBullet::Initialize(bullet, BulletType::_02, pos, radian, false);
 		}
 
+		tick -= interval;
+	}
+	return FireState::Update();
+}
+
+ContinueFlowerFireState::ContinueFlowerFireState(Character* pCharacter, float _interval, float _time):
+	FireState{ pCharacter, _interval, _time }
+{
+
+}
+
+bool ContinueFlowerFireState::Update()
+{
+	if (tick >= interval)
+	{
+		float length{
+			DirectX::XMVectorGetX(
+			DirectX::XMVector2Length(DirectX::XMVectorSet((float)pCharacter->simpleCollider.left, (float)pCharacter->simpleCollider.top, 0.f, 0.f))) };
+		const DirectX::XMVECTOR center{ DirectX::XMLoadFloat2(&pCharacter->position) };
+		DirectX::XMMATRIX parent{ DirectX::XMMatrixTranslationFromVector(center) };
+		constexpr int BULLET_COUNT = 22;
+		//»ç°Ý
+		for (int i = 0; i < BULLET_COUNT; ++i)
+		{
+			const float radian = PI * i * (360 / BULLET_COUNT) / 180;
+			DirectX::XMVECTOR v{};
+			DirectX::XMFLOAT2 pos{};
+			auto mat = DirectX::XMMatrixTranslation(length, 0.f, 0.f) * DirectX::XMMatrixRotationZ(radian) * parent;
+			v = DirectX::XMVector3Transform(v, mat);
+			DirectX::XMStoreFloat2(&pos, v);
+			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject(ObjectType::BULLET);
+			MetaBullet::Initialize(bullet, BulletType::_03, pos, radian, false);
+		}
 		tick -= interval;
 	}
 	return FireState::Update();

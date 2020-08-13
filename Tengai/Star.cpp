@@ -5,7 +5,8 @@
 #include "item.h"
 #include "GameWinBox.h"
 
-Star::Star()
+Star::Star():
+	m_radian{ 0.f }
 {
 	this->type = ObjectType::MONSTER;
 	currentFireState = nullptr;
@@ -29,7 +30,7 @@ std::shared_ptr<GameObject> Star::Initialize(const std::shared_ptr<GameObject>& 
 
 void Star::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& firstPos)
 {
-	Bind(EventId::PASS_TIME, &Monster::OnShow);
+	Bind(EventId::PASS_TIME, &Star::OnShow);
 	Bind(EventId::COLLISION_OBJ, &Star::OnCollision);
 	position = firstPos;
 	m_vecParts = {
@@ -177,7 +178,7 @@ void Star::OnShow(const Event&)
 	isEnable = true;
 	for (auto& iter : m_vecParts)
 	{
-		iter->isEnable = isEnable;
+		iter->isEnable = true;
 	}
 }
 

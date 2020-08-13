@@ -62,7 +62,7 @@ public:
 			RenderManager::DrawRect(area + position, RGB(120, 120, 120));
 		}
 
-		RenderManager::DrawString(L"계속하기", position.x - 27.5f, position.y);
+		RenderManager::DrawString(L"계속하기",static_cast<int>(position.x - 27.5f), static_cast<int>(position.y) );
 	}
 
 	COLORREF color;
@@ -110,7 +110,7 @@ public:
 			RenderManager::DrawRect(area + position, RGB(120, 120, 120));
 		}
 		
-		RenderManager::DrawString(L"종료", position.x - 15, position.y);
+		RenderManager::DrawString(L"종료",static_cast<int>( position.x - 15),static_cast<int>( position.y) );
 	}
 	
 	COLORREF color;

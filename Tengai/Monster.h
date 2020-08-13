@@ -27,8 +27,8 @@ public:
 	void OnCollision(const CollisionEvent& event);
 	//variable
 public:
-	RECT monsterRect;
-	MonsterType monsterType;
+	RECT monsterRect{};
+	MonsterType monsterType{ MonsterType::NONE };
 	CharacterState* currentFireState;
 	CharacterState* currentMoveState;
 	std::vector<CharacterState*> moveStateList;

@@ -115,8 +115,9 @@ void RenderManager::DrawCircle(const RECT& _rc, COLORREF _innerColor, COLORREF _
 void RenderManager::DrawString(const WCHAR* _str, int _x, int _y, TextAlign _textAlign)
 {
 	SIZE size{};
-	GetTextExtentPointW(pRenderManager->hBackBufferDC, _str, -1, &size);
+	const int len{ static_cast<int>(wcslen(_str)) };
 	int divVal{ 0 };
+	GetTextExtentPointW(pRenderManager->hBackBufferDC, _str, len, &size);
 	switch (_textAlign)
 	{
 	case TextAlign::Center:
@@ -129,7 +130,7 @@ void RenderManager::DrawString(const WCHAR* _str, int _x, int _y, TextAlign _tex
 	_x += static_cast<int>(size.cx * divVal / 2.f);
 	
 	//DrawTextExW(RenderManager->hBackBufferDC, _str, 0, wcslen(_str), )
-	TextOutW(pRenderManager->hBackBufferDC, _x, _y, _str, wcslen(_str));
+	TextOutW(pRenderManager->hBackBufferDC, _x, _y, _str, len);
 }
 
 void RenderManager::DrawString(const WCHAR* _str, int _x, int _y, const WCHAR* _font, int _fontSize, COLORREF _color, TextAlign _textAlign)
@@ -141,7 +142,7 @@ void RenderManager::DrawString(const WCHAR* _str, int _x, int _y, const WCHAR* _
 	HFONT hFont{ pRenderManager->GetFont(_font, _fontSize) };
 	HFONT oldFont = (HFONT)SelectObject(pRenderManager->hBackBufferDC, hFont);
 	COLORREF oldColor = SetTextColor(pRenderManager->hBackBufferDC, _color);
-	const size_t textLen{ wcslen(_str) };
+	const int textLen{ static_cast<int>( wcslen(_str)) };
 	SIZE size{};
 	GetTextExtentPointW(pRenderManager->hBackBufferDC, _str, textLen , &size);
 	int divVal{ 0 };
@@ -286,7 +287,7 @@ HFONT RenderManager::GetFont(const std::wstring& fontName, size_t fontSize)
 	std::wstring key{ fontName };
 	for (int i{ radix }; i >= 0; --i)
 	{
-		int s{ static_cast<int>(fontSize / powf(10, i)) % 10 };
+		int s{ static_cast<int>(fontSize / powf(10.f,static_cast<float>(i) )) % 10 };
 		key.push_back(L'0' + s);
 	}
 	auto it{ cachedFonts.find(key) };
