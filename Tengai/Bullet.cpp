@@ -403,6 +403,20 @@ void Bullet010::Update()
 		Move();
 		Bullet::Update();
 	}
+	if (m_fScalingStackTime > 0.15f)
+	{
+		if (m_fScalingStackTime > 0.3f)
+		{
+			m_fScalingStackTime = 0.f;
+			m_fAddValue = 0.f;
+		}
+
+		m_fAddValue -= 0.03f;
+	}
+	else
+	{
+		m_fAddValue += 0.03f;
+	}
 }
 
 void Bullet010::Render()
@@ -424,23 +438,7 @@ void Bullet010::Render()
 
 	DirectX::XMMATRIX matWorld, matScale, matRot, matParent;
 
-	if (m_fScalingStackTime > 0.15f)
-	{
-		if (m_fScalingStackTime > 0.3f)
-		{
-			m_fScalingStackTime = 0.f;
-			m_fAddValue = 0.f;
-		}
-			
-		m_fAddValue -= 0.03f;
-		matScale = DirectX::XMMatrixScaling(1.f + m_fAddValue, 1.f + m_fAddValue, 0.f);
-	}
-	else
-	{
-		m_fAddValue += 0.03f;
-		matScale = DirectX::XMMatrixScaling(1.f + m_fAddValue, 1.f + m_fAddValue, 0.f);
-	}
-
+	matScale = DirectX::XMMatrixScaling(1.f + m_fAddValue, 1.f + m_fAddValue, 0.f);
 	matRot = DirectX::XMMatrixRotationZ(radian);
 	matParent = DirectX::XMMatrixTranslation(position.x, position.y, 0.f);
 	matWorld = matScale * matRot * matParent;
