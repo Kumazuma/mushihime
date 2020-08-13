@@ -151,7 +151,7 @@ void Bullet01::Update()
 }
 void Bullet02::Update()
 {
-	radian += PI * 0.5f / 180;
+	radian += PI * 0.1f / 180;
 	Move();
 	Bullet::Update();
 }
@@ -474,7 +474,7 @@ Bullet011::Bullet011()
 
 void Bullet011::Update()
 {
-	radian -= PI * 0.5f / 180;
+	radian -= PI * 0.1f / 180;
 	
 	Move();
 	Bullet::Update();

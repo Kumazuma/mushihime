@@ -21,8 +21,7 @@ void PlayScene::OnLoaded()
         /*{ 1  ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::BOSS, Transform{ WINDOW_WIDTH + 32, WINDOW_HEIGHT / 2 }) }*/
         { 0 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
 
-        { 1 ,Star::Initialize(ObjectManager::CreateObject<Star>(ObjectType::MONSTER), MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
-                
+        { 1 ,Star::Initialize(ObjectManager::CreateObject<Star>(ObjectType::MONSTER), MonsterType::MOB01, DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },  
         { 2 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
         { 4 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB01,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
         { 4 ,Monster::Initialize(ObjectManager::CreateObject(ObjectType::MONSTER),MonsterType::MOB02,  DirectX::XMFLOAT2{ WINDOW_WIDTH / 2, -32 }) },
