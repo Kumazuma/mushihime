@@ -300,8 +300,8 @@ void Bullet08::Update()
 		m_iCheckNum++;
 		// ver 1
 		radian += PI * 1.f * 15.f / 180;
-		position.x += 3.f * sinf(radian);
-		position.y -= speed * TimeManager::DeltaTime();
+		position.x -= 3.f * sinf(radian);
+		position.y += speed * TimeManager::DeltaTime();
 	}
 
 	Bullet::Update();
@@ -336,14 +336,14 @@ void Bullet09::Update()
 		if (m_iCheckNum % 2 == 0)
 		{
 			radian += PI * 1.f * 15.f / 180;
-			position.x -= speed * TimeManager::DeltaTime() * 2.5f;
-			position.y -= speed * TimeManager::DeltaTime() * 2.5f;
+			position.x += speed * TimeManager::DeltaTime() * 2.5f;
+			position.y += speed * TimeManager::DeltaTime() * 2.5f;
 		}
 		else
 		{
 			radian += PI * 1.f * 15.f / 180;
-			position.x += speed * TimeManager::DeltaTime() * 2.5f;
-			position.y -= speed * TimeManager::DeltaTime() * 2.5f;
+			position.x -= speed * TimeManager::DeltaTime() * 2.5f;
+			position.y += speed * TimeManager::DeltaTime() * 2.5f;
 		}
 	}
 

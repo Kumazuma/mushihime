@@ -340,7 +340,7 @@ bool UniqueFlowerFireState::Update()
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
 			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject<Bullet07>(ObjectType::BULLET);
-			MetaBullet::Initialize(bullet, BulletType::_07, pos, radian, true);
+			MetaBullet::Initialize(bullet, BulletType::_07, pos, radian, false);
 		}
 		tick -= interval;
 	}
@@ -373,7 +373,7 @@ bool UniqueWarmFireState::Update()
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
 			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject<Bullet08>(ObjectType::BULLET);
-			MetaBullet::Initialize(bullet, BulletType::_08, pos, radian, true);
+			MetaBullet::Initialize(bullet, BulletType::_08, pos, radian, false);
 		}
 		tick -= interval;
 	}
@@ -406,7 +406,7 @@ bool ZigzagWarmFireState::Update()
 			v = DirectX::XMVector3Transform(v, mat);
 			DirectX::XMStoreFloat2(&pos, v);
 			std::shared_ptr<GameObject> bullet = ObjectManager::CreateObject<Bullet09>(ObjectType::BULLET);
-			MetaBullet::Initialize(bullet, BulletType::_09, pos, radian, true);
+			MetaBullet::Initialize(bullet, BulletType::_09, pos, radian, false);
 		}
 		tick -= interval;
 	}

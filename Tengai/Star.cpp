@@ -69,16 +69,31 @@ void Star::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& firstPo
 
 	// 공격패턴
 	fireStateList.push_back(
-		new WaitState{ 0.1f });
+		new WaitState{ 3});
 	fireStateList.push_back(
 		new CrossCurvesFireState{ this, 0.2f, 3.f });
 	fireStateList.push_back(
-		new WaitState{ 1 });
+		new WaitState{ 3 });
+	fireStateList.push_back(
+		new UniqueFlowerFireState{ this, 0.2f, 2.f });
+	fireStateList.push_back(
+		new WaitState{ 3 });
+	fireStateList.push_back(
+		new UniqueWarmFireState{ this, 0.2f, 2.f });
+	fireStateList.push_back(
+		new WaitState{ 3 });
+	fireStateList.push_back(
+		new ZigzagWarmFireState{ this, 0.2f, 2.f });
 	speed = 100;
 
 	fireStateList[0]->pNextState = fireStateList[1];
 	fireStateList[1]->pNextState = fireStateList[2];
-	fireStateList[2]->pNextState = fireStateList[0];
+	fireStateList[2]->pNextState = fireStateList[3];
+	fireStateList[3]->pNextState = fireStateList[4];
+	fireStateList[4]->pNextState = fireStateList[5];
+	fireStateList[5]->pNextState = fireStateList[6];
+	fireStateList[6]->pNextState = fireStateList[7];
+	fireStateList[7]->pNextState = fireStateList[0];
 	currentFireState = this->fireStateList.front();
 	currentFireState->Reset();
 
