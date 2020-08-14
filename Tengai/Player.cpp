@@ -13,7 +13,7 @@ Player::Player()
 	width = 30;
 	height = 30;
 #undef max
-	hp = std::numeric_limits<int>::max();
+	hp = 10;
 	type = ObjectType::PLAYER;
 	simpleCollider = { -15,-15,15,15 };
 	pFireState = new PlayerBasicAttackState{ this, 0.15f };
