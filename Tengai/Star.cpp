@@ -72,6 +72,18 @@ void Star::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& firstPo
 	fireStateList.push_back(
 		new WaitState{ 3});
 	fireStateList.push_back(
+		new ZigzagWarmFireState{ this, 0.2f, 2.f });
+	fireStateList.push_back(
+		new WaitState{ 3 });
+	fireStateList.push_back(
+		new ContinueFlowerFireState{ this, 0.2f, 3.f });
+	fireStateList.push_back(
+		new WaitState{ 3 });
+	fireStateList.push_back(
+		new UniqueWarmFireState{ this, 0.2f, 2.f });
+	fireStateList.push_back(
+		new WaitState{ 3 });
+	fireStateList.push_back(
 		new CrossCurvesFireState{ this, 0.2f, 3.f });
 	fireStateList.push_back(
 		new WaitState{ 3 });
@@ -94,7 +106,14 @@ void Star::Initialize(MonsterType _monsterType, const DirectX::XMFLOAT2& firstPo
 	fireStateList[4]->pNextState = fireStateList[5];
 	fireStateList[5]->pNextState = fireStateList[6];
 	fireStateList[6]->pNextState = fireStateList[7];
-	fireStateList[7]->pNextState = fireStateList[0];
+	fireStateList[7]->pNextState = fireStateList[8];
+	fireStateList[8]->pNextState = fireStateList[9];
+	fireStateList[9]->pNextState = fireStateList[10];
+	fireStateList[10]->pNextState = fireStateList[11];
+	fireStateList[11]->pNextState = fireStateList[12];
+	fireStateList[12]->pNextState = fireStateList[13];
+	fireStateList[13]->pNextState = fireStateList[0];
+	
 	currentFireState = this->fireStateList.front();
 	currentFireState->Reset();
 
